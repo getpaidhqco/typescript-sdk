@@ -1,6 +1,10 @@
-# GetPaidHQ TypeScript SDK
+# @getpaidhq/sdk
 
 Official TypeScript SDK for the GetPaidHQ API - A comprehensive subscription billing platform supporting traditional subscriptions, usage-based billing, and hybrid models.
+
+- Website: [getpaidhq.co](https://getpaidhq.co)
+- Developer Guide: [getpaidhq.co/docs/developer-guide](https://getpaidhq.co/docs/developer-guide)
+- API Documentation: [getpaidhq.co/docs/api-guide](https://getpaidhq.co/docs/api-guide)
 
 ## Installation
 
