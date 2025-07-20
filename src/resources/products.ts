@@ -35,7 +35,9 @@ export class ProductsResource {
   }
 
   async list(params?: PaginationParams): Promise<ListResponse<Product>> {
-    return this.httpClient.get<ListResponse<Product>>(`${this.resourcePath}${this.buildQueryString(params)}`);
+    return this.httpClient.get<ListResponse<Product>>(
+      `${this.resourcePath}${this.buildQueryString(params)}`,
+    );
   }
 
   async create(data: CreateProductRequest): Promise<Product> {

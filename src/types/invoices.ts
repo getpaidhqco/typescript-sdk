@@ -1,19 +1,8 @@
 import { BaseEntity, Currency, DateTime, Metadata, PaginationParams } from './common';
 
-export type InvoiceStatus =
-  | 'draft'
-  | 'sent'
-  | 'paid'
-  | 'overdue'
-  | 'cancelled'
-  | 'refunded';
+export type InvoiceStatus = 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled' | 'refunded';
 
-export type InvoiceType =
-  | 'invoice'
-  | 'proforma'
-  | 'quote'
-  | 'receipt'
-  | 'statement';
+export type InvoiceType = 'invoice' | 'proforma' | 'quote' | 'receipt' | 'statement';
 
 export type InvoiceCategory =
   | 'initial'

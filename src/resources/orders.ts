@@ -31,7 +31,9 @@ export class OrdersResource {
   }
 
   async list(params?: PaginationParams): Promise<ListResponse<Order>> {
-    return this.httpClient.get<ListResponse<Order>>(`${this.resourcePath}${this.buildQueryString(params)}`);
+    return this.httpClient.get<ListResponse<Order>>(
+      `${this.resourcePath}${this.buildQueryString(params)}`,
+    );
   }
 
   async create(data: CreateOrderRequest): Promise<Order> {

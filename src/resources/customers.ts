@@ -35,7 +35,9 @@ export class CustomersResource {
   }
 
   async list(params?: CustomerListParams): Promise<ListResponse<Customer>> {
-    return this.httpClient.get<ListResponse<Customer>>(`${this.resourcePath}${this.buildQueryString(params)}`);
+    return this.httpClient.get<ListResponse<Customer>>(
+      `${this.resourcePath}${this.buildQueryString(params)}`,
+    );
   }
 
   async create(data: CreateCustomerRequest): Promise<Customer> {

@@ -29,7 +29,9 @@ export class MetersResource {
   }
 
   async list(params?: PaginationParams): Promise<ListResponse<Meter>> {
-    return this.httpClient.get<ListResponse<Meter>>(`${this.resourcePath}${this.buildQueryString(params)}`);
+    return this.httpClient.get<ListResponse<Meter>>(
+      `${this.resourcePath}${this.buildQueryString(params)}`,
+    );
   }
 
   async create(data: CreateMeterRequest): Promise<Meter> {

@@ -30,7 +30,9 @@ export class PaymentsResource {
   }
 
   async list(params?: PaymentListParams): Promise<ListResponse<Payment>> {
-    return this.httpClient.get<ListResponse<Payment>>(`${this.resourcePath}${this.buildQueryString(params)}`);
+    return this.httpClient.get<ListResponse<Payment>>(
+      `${this.resourcePath}${this.buildQueryString(params)}`,
+    );
   }
 
   async get(paymentId: string): Promise<Payment> {

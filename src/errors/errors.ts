@@ -103,9 +103,10 @@ export function handleApiError(error: AxiosError<ErrorResponse>): never {
       throw new AuthorizationError(message, details);
     case 404:
       throw new NotFoundError('Resource', undefined);
-    case 429:
+    case 429: {
       const retryAfter = response.headers['retry-after'];
       throw new RateLimitError(message, retryAfter ? parseInt(retryAfter as string) : undefined);
+    }
     case 500:
     case 502:
     case 503:

@@ -45,7 +45,10 @@ export class DunningResource {
     return this.httpClient.get<DunningCampaign>(`/api/dunning/campaigns/${campaignId}`);
   }
 
-  async updateCampaign(campaignId: string, data: UpdateDunningCampaignRequest): Promise<DunningCampaign> {
+  async updateCampaign(
+    campaignId: string,
+    data: UpdateDunningCampaignRequest,
+  ): Promise<DunningCampaign> {
     return this.httpClient.patch<DunningCampaign>(`/api/dunning/campaigns/${campaignId}`, data);
   }
 
@@ -54,11 +57,16 @@ export class DunningResource {
   }
 
   async triggerManualAttempt(campaignId: string): Promise<DunningAttempt> {
-    return this.httpClient.post<DunningAttempt>(`/api/dunning/campaigns/${campaignId}/attempts`, {});
+    return this.httpClient.post<DunningAttempt>(
+      `/api/dunning/campaigns/${campaignId}/attempts`,
+      {},
+    );
   }
 
   async listCampaignCommunications(campaignId: string): Promise<DunningCommunication[]> {
-    return this.httpClient.get<DunningCommunication[]>(`/api/dunning/campaigns/${campaignId}/communications`);
+    return this.httpClient.get<DunningCommunication[]>(
+      `/api/dunning/campaigns/${campaignId}/communications`,
+    );
   }
 
   // Configurations
@@ -66,7 +74,9 @@ export class DunningResource {
     return this.httpClient.get<DunningConfiguration[]>('/api/dunning/configurations');
   }
 
-  async createConfiguration(data: CreateDunningConfigurationRequest): Promise<DunningConfiguration> {
+  async createConfiguration(
+    data: CreateDunningConfigurationRequest,
+  ): Promise<DunningConfiguration> {
     return this.httpClient.post<DunningConfiguration>('/api/dunning/configurations', data);
   }
 
@@ -78,7 +88,10 @@ export class DunningResource {
     configId: string,
     data: UpdateDunningConfigurationRequest,
   ): Promise<DunningConfiguration> {
-    return this.httpClient.patch<DunningConfiguration>(`/api/dunning/configurations/${configId}`, data);
+    return this.httpClient.patch<DunningConfiguration>(
+      `/api/dunning/configurations/${configId}`,
+      data,
+    );
   }
 
   // Payment tokens
@@ -91,6 +104,9 @@ export class DunningResource {
   }
 
   async createSubscriptionPaymentToken(subscriptionId: string): Promise<PaymentToken> {
-    return this.httpClient.post<PaymentToken>(`/api/admin/subscriptions/${subscriptionId}/payment-tokens`, {});
+    return this.httpClient.post<PaymentToken>(
+      `/api/admin/subscriptions/${subscriptionId}/payment-tokens`,
+      {},
+    );
   }
 }

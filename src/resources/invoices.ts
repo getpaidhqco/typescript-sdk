@@ -33,7 +33,9 @@ export class InvoicesResource {
   }
 
   async list(params?: InvoiceListParams): Promise<ListResponse<Invoice>> {
-    return this.httpClient.get<ListResponse<Invoice>>(`${this.resourcePath}${this.buildQueryString(params)}`);
+    return this.httpClient.get<ListResponse<Invoice>>(
+      `${this.resourcePath}${this.buildQueryString(params)}`,
+    );
   }
 
   async create(data: CreateInvoiceRequest): Promise<Invoice> {
@@ -48,7 +50,10 @@ export class InvoicesResource {
     return this.httpClient.put<Invoice>(`${this.resourcePath}/${invoiceId}`, data);
   }
 
-  async performAction(invoiceId: string, action: 'send' | 'finalize' | 'void' | 'mark_paid'): Promise<Invoice> {
+  async performAction(
+    invoiceId: string,
+    action: 'send' | 'finalize' | 'void' | 'mark_paid',
+  ): Promise<Invoice> {
     return this.httpClient.post<Invoice>(`${this.resourcePath}/${invoiceId}/actions`, { action });
   }
 
@@ -72,8 +77,14 @@ export class InvoicesResource {
     return this.httpClient.get<InvoiceLineItem[]>(`${this.resourcePath}/${invoiceId}/line-items`);
   }
 
-  async addLineItem(invoiceId: string, data: CreateInvoiceLineItemRequest): Promise<InvoiceLineItem> {
-    return this.httpClient.post<InvoiceLineItem>(`${this.resourcePath}/${invoiceId}/line-items`, data);
+  async addLineItem(
+    invoiceId: string,
+    data: CreateInvoiceLineItemRequest,
+  ): Promise<InvoiceLineItem> {
+    return this.httpClient.post<InvoiceLineItem>(
+      `${this.resourcePath}/${invoiceId}/line-items`,
+      data,
+    );
   }
 
   async updateLineItem(

@@ -39,7 +39,9 @@ export class SubscriptionsResource {
   }
 
   async list(params?: SubscriptionListParams): Promise<ListResponse<Subscription>> {
-    return this.httpClient.get<ListResponse<Subscription>>(`${this.resourcePath}${this.buildQueryString(params)}`);
+    return this.httpClient.get<ListResponse<Subscription>>(
+      `${this.resourcePath}${this.buildQueryString(params)}`,
+    );
   }
 
   async create(data: CreateSubscriptionRequest): Promise<Subscription> {
@@ -66,7 +68,10 @@ export class SubscriptionsResource {
     subscriptionId: string,
     data?: ActivateSubscriptionRequest,
   ): Promise<Subscription> {
-    return this.httpClient.put<Subscription>(`${this.resourcePath}/${subscriptionId}/activate`, data || {});
+    return this.httpClient.put<Subscription>(
+      `${this.resourcePath}/${subscriptionId}/activate`,
+      data || {},
+    );
   }
 
   async cancel(subscriptionId: string, data: CancelSubscriptionRequest): Promise<Subscription> {
