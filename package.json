@@ -66,10 +66,10 @@
   "sideEffects": false,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/getpaidhq/typescript-sdk.git"
+    "url": "git+https://github.com/getpaidhqco/gphq-ts-sdk.git"
   },
   "bugs": {
-    "url": "https://github.com/getpaidhq/typescript-sdk/issues"
+    "url": "https://github.com/getpaidhqco/gphq-ts-sdk/issues"
   },
   "homepage": "https://getpaidhq.co",
   "dependencies": {
