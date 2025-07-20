@@ -1,3 +1,11 @@
+## [1.0.2](https://github.com/getpaidhqco/typescript-sdk/compare/v1.0.1...v1.0.2) (2025-07-20)
+
+
+### Bug Fixes
+
+* readme examples ([ca029e0](https://github.com/getpaidhqco/typescript-sdk/commit/ca029e0850b5d09ca5caffdf4b7fe8059805bd68))
+* repo url change ([0d4dda9](https://github.com/getpaidhqco/typescript-sdk/commit/0d4dda9f8aec1180fa6c48ab6b2a2df711491bfe))
+
 ## [1.0.1](https://github.com/getpaidhqco/gphq-ts-sdk/compare/v1.0.0...v1.0.1) (2025-07-20)
 
 
