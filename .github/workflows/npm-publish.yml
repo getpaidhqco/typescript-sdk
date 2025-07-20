@@ -1,33 +1,20 @@
-# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
-# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+# DEPRECATED: This workflow is replaced by the automated release.yml workflow
+# The release.yml workflow uses semantic-release for automated versioning and publishing
+# 
+# This file is kept for reference but should not be used.
+# To publish, push commits following conventional commit format to the main branch.
 
-name: Node.js Package
+name: Node.js Package (DEPRECATED)
 
 on:
-  release:
-    types: [created]
+  workflow_dispatch: # Manual trigger only
 
 jobs:
-  build:
+  deprecated-notice:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm ci
-      - run: npm test
-
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm publish
-        env:
-          NPM_TOKEN: ${{secrets.npm_token}}
+      - name: Notice
+        run: |
+          echo "⚠️  This workflow is DEPRECATED"
+          echo "Use the automated release.yml workflow instead"
+          echo "Push conventional commits to main branch to trigger releases"
