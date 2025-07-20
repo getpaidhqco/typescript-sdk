@@ -2,21 +2,15 @@ import { BaseEntity, Metadata } from './common';
 
 export interface Organization extends BaseEntity {
   name: string;
-  email: string;
-  website?: string;
-  logo_url?: string;
-  billing_email?: string;
-  tax_id?: string;
+  country: string;
+  timezone: string;
   metadata?: Metadata;
 }
 
 export interface CreateOrganizationRequest {
   name: string;
-  email: string;
-  website?: string;
-  logo_url?: string;
-  billing_email?: string;
-  tax_id?: string;
+  country: string; // ISO 3166-1 alpha-2 country code
+  timezone: string; // IANA timezone identifier
   metadata?: Metadata;
 }
 

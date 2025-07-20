@@ -1,4 +1,4 @@
-import { BaseEntity, Currency, DateTime, Address, Metadata, PaginationParams } from './common';
+import { BaseEntity, Currency, DateTime, Metadata, PaginationParams } from './common';
 
 export type InvoiceStatus =
   | 'draft'
@@ -8,82 +8,138 @@ export type InvoiceStatus =
   | 'cancelled'
   | 'refunded';
 
+export type InvoiceType =
+  | 'invoice'
+  | 'proforma'
+  | 'quote'
+  | 'receipt'
+  | 'statement';
+
+export type InvoiceCategory =
+  | 'initial'
+  | 'recurring'
+  | 'usage'
+  | 'adjustment'
+  | 'setup'
+  | 'cancellation'
+  | 'refund';
+
 export interface Invoice extends BaseEntity {
   customer_id: string;
-  number: string;
+  order_id?: string;
+  subscription_id?: string;
+  sequence_id?: string;
+  doc_number?: string;
+  type: InvoiceType;
+  invoice_type: InvoiceCategory;
   status: InvoiceStatus;
+  is_immutable: boolean;
   currency: Currency;
-  subtotal: number;
-  tax: number;
+  sub_total: number;
+  tax_total: number;
+  discount_total: number;
   total: number;
   amount_paid: number;
   amount_due: number;
-  due_date?: DateTime;
+  tax_provider?: string;
+  tax_transaction_id?: string;
+  tax_breakdown?: any;
+  issued_at?: DateTime;
+  due_at?: DateTime;
+  schedule_at?: DateTime;
+  finalize_at?: DateTime;
   paid_at?: DateTime;
-  period_start?: DateTime;
-  period_end?: DateTime;
-  subscription_id?: string;
-  billing_address?: Address;
-  line_items?: InvoiceLineItem[];
-  payment_intent_id?: string;
+  notes?: string;
+  customer_notes?: string;
   metadata?: Metadata;
+  exchange_rate?: number;
+  base_currency?: Currency;
+  customer?: any; // Customer object
+  line_items?: InvoiceLineItem[];
+  payments?: any[]; // Payment objects
 }
 
 export interface InvoiceLineItem extends BaseEntity {
   invoice_id: string;
-  description: string;
-  quantity: number;
-  unit_amount: number;
-  amount: number;
-  currency: Currency;
-  period_start?: DateTime;
-  period_end?: DateTime;
+  product_id?: string;
+  variant_id?: string;
   price_id?: string;
+  description: string;
+  category?: string;
+  quantity: number;
+  unit_price: number;
+  line_total: number;
+  discount_type?: 'percentage' | 'fixed';
+  discount_value?: number;
+  discount_total?: number;
+  tax_code?: string;
+  tax_rate?: number;
+  tax_amount?: number;
+  tax_exempt?: boolean;
+  seq?: number;
   metadata?: Metadata;
 }
 
 export interface CreateInvoiceRequest {
   customer_id: string;
-  currency?: Currency;
-  due_date?: DateTime;
-  description?: string;
-  line_items?: CreateInvoiceLineItemRequest[];
-  auto_advance?: boolean;
-  collection_method?: 'charge_automatically' | 'send_invoice';
+  order_id?: string;
+  subscription_id?: string;
+  type: InvoiceType;
+  invoice_type: InvoiceCategory;
+  currency: Currency;
+  due_at?: DateTime;
+  notes?: string;
+  customer_notes?: string;
   metadata?: Metadata;
+  line_items?: CreateInvoiceLineItemRequest[];
 }
 
 export interface CreateInvoiceLineItemRequest {
-  description: string;
-  quantity: number;
-  unit_amount: number;
-  currency?: Currency;
-  period_start?: DateTime;
-  period_end?: DateTime;
+  product_id?: string;
+  variant_id?: string;
   price_id?: string;
+  description: string;
+  category?: string;
+  quantity: number;
+  unit_price: number;
+  discount_type?: 'percentage' | 'fixed';
+  discount_value?: number;
+  tax_code?: string;
+  tax_rate?: number;
+  tax_exempt?: boolean;
   metadata?: Metadata;
 }
 
 export interface UpdateInvoiceRequest {
-  description?: string;
-  due_date?: DateTime;
+  customer_notes?: string;
+  notes?: string;
+  due_at?: DateTime;
   metadata?: Metadata;
 }
 
 export interface UpdateInvoiceLineItemRequest {
   description?: string;
+  category?: string;
   quantity?: number;
-  unit_amount?: number;
+  unit_price?: number;
+  discount_type?: 'percentage' | 'fixed';
+  discount_value?: number;
+  tax_code?: string;
+  tax_rate?: number;
+  tax_exempt?: boolean;
   metadata?: Metadata;
 }
 
 export interface InvoiceHistory {
   id: string;
   invoice_id: string;
-  action: string;
+  action: 'created' | 'updated' | 'finalized' | 'sent' | 'paid' | 'voided';
+  field?: string;
+  old_value?: any;
+  new_value?: any;
+  user_email?: string;
+  reason?: string;
   timestamp: DateTime;
-  user_id?: string;
-  details?: Record<string, any>;
 }
 
 export interface InvoiceListParams extends PaginationParams {

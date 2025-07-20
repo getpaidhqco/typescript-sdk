@@ -10,7 +10,7 @@ export interface Customer extends BaseEntity {
   shipping_address?: Address;
   status: 'active' | 'inactive';
   metadata?: Metadata;
-  payment_methods?: PaymentMethod[];
+  payment_methods?: any[];
   default_payment_method_id?: string;
 }
 
@@ -37,41 +37,21 @@ export interface UpdateCustomerRequest {
   status?: 'active' | 'inactive';
 }
 
-export interface PaymentMethod extends BaseEntity {
-  customer_id: string;
-  type: 'card' | 'bank_account' | 'mobile_money';
-  provider: string;
-  provider_payment_method_id: string;
-  is_default: boolean;
-  details: PaymentMethodDetails;
-  metadata?: Metadata;
-}
-
-export interface PaymentMethodDetails {
-  // Card details
-  brand?: string;
-  last4?: string;
-  exp_month?: number;
-  exp_year?: number;
-  // Bank account details
-  bank_name?: string;
-  account_type?: string;
-  account_last4?: string;
-  // Mobile money details
-  phone_number?: string;
-  provider_name?: string;
-}
-
 export interface CreatePaymentMethodRequest {
-  type: 'card' | 'bank_account' | 'mobile_money';
-  provider: string;
-  provider_payment_method_id: string;
+  psp: string;
+  name: string;
+  type: 'card' | 'bank_account';
+  details?: any;
+  token: string;
   is_default?: boolean;
+  billing_address?: Address;
   metadata?: Metadata;
 }
 
 export interface UpdatePaymentMethodRequest {
+  name?: string;
   is_default?: boolean;
+  billing_address?: Address;
   metadata?: Metadata;
 }
 

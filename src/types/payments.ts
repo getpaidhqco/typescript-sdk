@@ -11,41 +11,56 @@ export type PaymentStatus =
   | 'fraudulent';
 
 export interface Payment extends BaseEntity {
+  psp: string;
+  psp_id: string;
+  reference?: string;
+  recurring: boolean;
+  order_id?: string;
+  invoice_id?: string;
+  subscription_id?: string;
   customer_id: string;
   amount: number;
   currency: Currency;
   status: PaymentStatus;
-  payment_method_id: string;
-  description?: string;
-  statement_descriptor?: string;
-  invoice_id?: string;
-  subscription_id?: string;
-  attempt_count: number;
-  next_attempt_at?: DateTime;
-  failure_reason?: string;
-  provider_payment_id?: string;
+  psp_fee?: number;
+  platform_fee?: number;
+  net_amount?: number;
   refunded_amount?: number;
   metadata?: Metadata;
+  completed_at?: DateTime;
 }
 
 export interface Refund extends BaseEntity {
+  psp_refund_id?: string;
   payment_id: string;
   amount: number;
   currency: Currency;
   reason?: string;
-  status: 'pending' | 'succeeded' | 'failed' | 'cancelled';
-  failure_reason?: string;
-  provider_refund_id?: string;
-  metadata?: Metadata;
+  status: 'pending' | 'completed' | 'error';
+  refunded_at?: DateTime;
+  completed_at?: DateTime;
 }
 
 export interface RefundPaymentRequest {
-  amount?: number; // If not provided, full refund
   reason?: string;
-  metadata?: Metadata;
+  amount?: number; // Amount to refund in cents (if not provided, full amount)
 }
 
 export interface PaymentListParams extends PaginationParams {
   status?: PaymentStatus;
   customer_id?: string;
+}
+
+export interface PaymentMethod extends BaseEntity {
+  status: 'active' | 'expired';
+  psp: string;
+  name: string;
+  customer_id: string;
+  billing_address?: any; // Address object
+  details?: any; // Masked payment method details
+  type: 'card' | 'bank_account';
+  token: string;
+  is_default: boolean;
+  metadata?: Metadata;
+  expire_at?: DateTime;
 }

@@ -1,9 +1,24 @@
 import { AuthManager } from './auth/auth';
 import { HttpClient, HttpClientConfig } from './utils/http-client';
-import { CustomersResource } from './resources/customers';
-import { ProductsResource, VariantsResource, PricesResource } from './resources/products';
-import { SubscriptionsResource } from './resources/subscriptions';
-import { UsageResource } from './resources/usage';
+import {
+  CustomersResource,
+  ProductsResource,
+  VariantsResource,
+  PricesResource,
+  SubscriptionsResource,
+  UsageResource,
+  OrganizationsResource,
+  MetersResource,
+  OrdersResource,
+  PaymentsResource,
+  InvoicesResource,
+  DunningResource,
+  WebhooksResource,
+  ReportsResource,
+  SettingsResource,
+  GatewaysResource,
+  SessionsResource,
+} from './resources';
 
 export interface GetPaidHQClientConfig {
   /**
@@ -18,7 +33,7 @@ export interface GetPaidHQClientConfig {
 
   /**
    * Base URL for the API
-   * @default https://api.getpaidhq.com
+   * @default https://api.getpaidhq.co
    */
   baseURL?: string;
 
@@ -57,6 +72,17 @@ export class GetPaidHQClient {
   public readonly prices: PricesResource;
   public readonly subscriptions: SubscriptionsResource;
   public readonly usage: UsageResource;
+  public readonly organizations: OrganizationsResource;
+  public readonly meters: MetersResource;
+  public readonly orders: OrdersResource;
+  public readonly payments: PaymentsResource;
+  public readonly invoices: InvoicesResource;
+  public readonly dunning: DunningResource;
+  public readonly webhooks: WebhooksResource;
+  public readonly reports: ReportsResource;
+  public readonly settings: SettingsResource;
+  public readonly gateways: GatewaysResource;
+  public readonly sessions: SessionsResource;
 
   constructor(config: GetPaidHQClientConfig) {
     // Validate auth config
@@ -72,7 +98,7 @@ export class GetPaidHQClient {
 
     // Initialize HTTP client
     const httpConfig: HttpClientConfig = {
-      baseURL: config.baseURL || 'https://api.getpaidhq.com',
+      baseURL: config.baseURL || 'https://api.getpaidhq.co',
       timeout: config.timeout,
       retries: config.retries,
       retryDelay: config.retryDelay,
@@ -88,6 +114,17 @@ export class GetPaidHQClient {
     this.prices = new PricesResource(this.httpClient);
     this.subscriptions = new SubscriptionsResource(this.httpClient);
     this.usage = new UsageResource(this.httpClient);
+    this.organizations = new OrganizationsResource(this.httpClient);
+    this.meters = new MetersResource(this.httpClient);
+    this.orders = new OrdersResource(this.httpClient);
+    this.payments = new PaymentsResource(this.httpClient);
+    this.invoices = new InvoicesResource(this.httpClient);
+    this.dunning = new DunningResource(this.httpClient);
+    this.webhooks = new WebhooksResource(this.httpClient);
+    this.reports = new ReportsResource(this.httpClient);
+    this.settings = new SettingsResource(this.httpClient);
+    this.gateways = new GatewaysResource(this.httpClient);
+    this.sessions = new SessionsResource(this.httpClient);
   }
 
   /**

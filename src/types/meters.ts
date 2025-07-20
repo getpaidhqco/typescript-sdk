@@ -1,40 +1,33 @@
-import { BaseEntity, Metadata } from './common';
+import { BaseEntity } from './common';
 
 export interface Meter extends BaseEntity {
-  name: string;
+  org_id: string;
   slug: string;
+  name: string;
   description?: string;
-  event_type: string;
-  aggregation_method: 'sum' | 'max' | 'count' | 'unique_count';
-  value_property?: string;
-  unique_property?: string;
-  filters?: MeterFilter[];
-  status: 'active' | 'inactive';
-  metadata?: Metadata;
-}
-
-export interface MeterFilter {
-  property: string;
-  operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'nin';
-  value: any;
+  event_name: string;
+  aggregation_type: 'sum' | 'max' | 'average' | 'last_during_period';
+  value_property: string;
+  unit_type?: string;
+  is_active: boolean;
 }
 
 export interface CreateMeterRequest {
-  name: string;
   slug: string;
+  name: string;
   description?: string;
-  event_type: string;
-  aggregation_method: 'sum' | 'max' | 'count' | 'unique_count';
-  value_property?: string;
-  unique_property?: string;
-  filters?: MeterFilter[];
-  metadata?: Metadata;
+  event_name: string;
+  aggregation_type: 'sum' | 'max' | 'average' | 'last_during_period';
+  value_property: string;
+  unit_type?: string;
 }
 
 export interface UpdateMeterRequest {
   name?: string;
   description?: string;
-  status?: 'active' | 'inactive';
-  filters?: MeterFilter[];
-  metadata?: Metadata;
+  event_name?: string;
+  aggregation_type?: 'sum' | 'max' | 'average' | 'last_during_period';
+  value_property?: string;
+  unit_type?: string;
+  is_active?: boolean;
 }

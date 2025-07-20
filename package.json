@@ -15,6 +15,26 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.mjs",
+      "require": "./dist/client.js"
+    },
+    "./resources": {
+      "types": "./dist/resources/index.d.ts",
+      "import": "./dist/resources/index.mjs",
+      "require": "./dist/resources/index.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.mjs",
+      "require": "./dist/types/index.js"
+    },
+    "./errors": {
+      "types": "./dist/errors/errors.d.ts",
+      "import": "./dist/errors/errors.mjs",
+      "require": "./dist/errors/errors.js"
     }
   },
   "scripts": {
@@ -40,6 +60,7 @@
   ],
   "author": "GetPaidHQ <support@getpaidhq.co>",
   "license": "MIT",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/getpaidhq/typescript-sdk.git"
@@ -47,7 +68,7 @@
   "bugs": {
     "url": "https://github.com/getpaidhq/typescript-sdk/issues"
   },
-  "homepage": "https://getpaidhq.com",
+  "homepage": "https://getpaidhq.co",
   "dependencies": {
     "axios": "^1.7.7",
     "axios-retry": "^4.5.0"

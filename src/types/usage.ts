@@ -79,3 +79,29 @@ export interface UsageResponse {
   status: 'accepted' | 'rejected';
   errors?: string[];
 }
+
+export interface CloudEventUsageRequest {
+  specversion: string; // Should be "1.0"
+  type: string;
+  id: string;
+  time: DateTime;
+  source: string;
+  subject: string; // subscription_item_id
+  data: Record<string, any>;
+}
+
+export interface CloudEventUsageResponse {
+  id: string;
+  org_id: string;
+  subscription_id: string;
+  subscription_item_id: string;
+  meter_id?: string;
+  spec_version: string;
+  type: string;
+  event_id: string;
+  time: DateTime;
+  source: string;
+  subject: string;
+  data: Record<string, any>;
+  received_at: DateTime;
+}

@@ -61,12 +61,20 @@ export interface UpdateSubscriptionRequest {
 }
 
 export interface PauseSubscriptionRequest {
+  reason: string;
+  pause_mode: 'temporary' | 'indefinite';
   resume_at?: DateTime;
-  behavior?: 'keep_as_draft' | 'mark_uncollectible' | 'void';
 }
 
 export interface ResumeSubscriptionRequest {
-  billing_cycle_anchor?: 'now' | 'unchanged';
+  reason?: string;
+  resume_behavior?: 'continue_existing_period' | 'start_new_period';
+  proration_mode?: 'none' | 'credit_unused';
+}
+
+export interface CancelSubscriptionRequest {
+  reason?: string;
+  cancel_at?: 'immediate' | 'period_end';
 }
 
 export interface ActivateSubscriptionRequest {
@@ -75,14 +83,16 @@ export interface ActivateSubscriptionRequest {
 }
 
 export interface ChangePlanRequest {
-  items: CreateSubscriptionItemRequest[];
-  proration_behavior?: 'create_prorations' | 'none' | 'always_invoice';
-  billing_cycle_anchor?: 'now' | 'unchanged' | DateTime;
+  new_variant_id: string;
+  new_price_id: string;
+  proration_mode?: 'none' | 'immediate' | 'credit_unused';
+  effective_date?: 'immediate' | 'next_billing_cycle';
+  reason?: string;
 }
 
 export interface UpdateBillingAnchorRequest {
-  billing_cycle_anchor: DateTime;
-  proration_behavior?: 'create_prorations' | 'none';
+  billing_anchor: number; // Day of month (1-31)
+  proration_mode?: 'none' | 'credit_unused';
 }
 
 export interface PlanChange {

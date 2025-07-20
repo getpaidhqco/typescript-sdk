@@ -71,7 +71,7 @@ client.updateBearerToken('new_bearer_token');
 ```typescript
 const client = new GetPaidHQClient({
   apiKey: 'sk_your_api_key',
-  baseURL: 'https://api.test.getpaidhq.com', // Optional: custom base URL
+  baseURL: 'https://api.test.getpaidhq.co', // Optional: custom base URL
   timeout: 60000, // Optional: request timeout in ms (default: 30000)
   retries: 5, // Optional: number of retries (default: 3)
   retryDelay: 2000, // Optional: delay between retries in ms (default: 1000)
@@ -417,12 +417,12 @@ console.log('API Status:', health.status); // "ok"
 
 ## API Reference
 
-For detailed API documentation, visit [https://docs.getpaidhq.com/api](https://docs.getpaidhq.com/api)
+For detailed API documentation, visit [https://docs.getpaidhq.co/api](https://docs.getpaidhq.co/api)
 
 ## Support
 
-- Documentation: [https://docs.getpaidhq.com](https://docs.getpaidhq.com)
-- Email: support@getpaidhq.com
+- Documentation: [https://docs.getpaidhq.co](https://docs.getpaidhq.co)
+- Email: support@getpaidhq.co
 - Issues: [GitHub Issues](https://github.com/getpaidhq/typescript-sdk/issues)
 
 ## License

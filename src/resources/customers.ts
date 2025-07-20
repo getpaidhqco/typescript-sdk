@@ -5,13 +5,13 @@ import {
   UpdateCustomerRequest,
   CustomerListParams,
   ListResponse,
-  PaymentMethod,
   CreatePaymentMethodRequest,
   UpdatePaymentMethodRequest,
   Invoice,
   InvoiceListParams,
   Order,
 } from '../types';
+import { PaymentMethod } from '../types/payments';
 
 export class CustomersResource {
   private readonly resourcePath = '/api/customers';
@@ -87,6 +87,18 @@ export class CustomersResource {
     );
   }
 
+  async listPaymentMethods(customerId: string): Promise<PaymentMethod[]> {
+    return this.httpClient.get<PaymentMethod[]>(
+      `${this.resourcePath}/${customerId}/payment-methods`,
+    );
+  }
+
+  async getPaymentMethod(customerId: string, paymentMethodId: string): Promise<PaymentMethod> {
+    return this.httpClient.get<PaymentMethod>(
+      `${this.resourcePath}/${customerId}/payment-methods/${paymentMethodId}`,
+    );
+  }
+
   async updatePaymentMethod(
     customerId: string,
     paymentMethodId: string,
@@ -95,6 +107,12 @@ export class CustomersResource {
     return this.httpClient.put<PaymentMethod>(
       `${this.resourcePath}/${customerId}/payment-methods/${paymentMethodId}`,
       data,
+    );
+  }
+
+  async deletePaymentMethod(customerId: string, paymentMethodId: string): Promise<void> {
+    return this.httpClient.delete(
+      `${this.resourcePath}/${customerId}/payment-methods/${paymentMethodId}`,
     );
   }
 

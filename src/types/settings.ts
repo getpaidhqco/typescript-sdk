@@ -7,7 +7,13 @@ export interface Setting extends BaseEntity {
   description?: string;
 }
 
-export interface UpdateSettingRequest {
+export interface CreateSettingRequest {
+  key: string;
   value: string;
+  description?: string;
+}
+
+export interface UpdateSettingRequest {
+  value?: string;
   description?: string;
 }

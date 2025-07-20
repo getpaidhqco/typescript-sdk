@@ -11,3 +11,7 @@ export * from './orders';
 export * from './gateways';
 export * from './settings';
 export * from './organizations';
+export * from './dunning';
+export * from './webhooks';
+export * from './reports';
+export * from './sessions';

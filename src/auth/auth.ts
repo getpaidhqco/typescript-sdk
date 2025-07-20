@@ -22,7 +22,7 @@ export class AuthManager {
 
     // API Key takes precedence over Bearer token
     if (this.config.apiKey) {
-      requestConfig.headers['x-api-key'] = this.config.apiKey;
+      requestConfig.headers['X-API-Key'] = this.config.apiKey;
     } else if (this.config.bearerToken) {
       requestConfig.headers['Authorization'] = `Bearer ${this.config.bearerToken}`;
     }

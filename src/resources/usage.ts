@@ -3,10 +3,11 @@ import {
   UsageRecord,
   RecordUsageRequest,
   BatchRecordUsageRequest,
+  CloudEventUsageRequest,
+  CloudEventUsageResponse,
   ListResponse,
   PaginationParams,
   UsageSummary,
-  UsageResponse,
 } from '../types';
 
 export class UsageResource {
@@ -28,8 +29,8 @@ export class UsageResource {
     return query ? `?${query}` : '';
   }
 
-  async recordEvent(data: RecordUsageRequest): Promise<UsageResponse> {
-    return this.httpClient.post<UsageResponse>('/api/usage-events', data);
+  async recordCloudEvent(data: CloudEventUsageRequest): Promise<CloudEventUsageResponse> {
+    return this.httpClient.post<CloudEventUsageResponse>('/api/usage-events', data);
   }
 
   async record(data: RecordUsageRequest): Promise<UsageRecord> {
@@ -52,11 +53,11 @@ export class UsageResource {
     return this.httpClient.get<ListResponse<UsageRecord>>(`/api/usage-records${queryString}`);
   }
 
-  async get(usageRecordId: string): Promise<UsageRecord> {
+  async getUsageRecord(usageRecordId: string): Promise<UsageRecord> {
     return this.httpClient.get<UsageRecord>(`/api/usage-records/${usageRecordId}`);
   }
 
-  async delete(usageRecordId: string): Promise<void> {
+  async deleteUsageRecord(usageRecordId: string): Promise<void> {
     return this.httpClient.delete(`/api/usage-records/${usageRecordId}`);
   }
 

@@ -7,6 +7,7 @@ import {
   ListResponse,
   PauseSubscriptionRequest,
   ResumeSubscriptionRequest,
+  CancelSubscriptionRequest,
   ActivateSubscriptionRequest,
   ChangePlanRequest,
   UpdateBillingAnchorRequest,
@@ -68,7 +69,7 @@ export class SubscriptionsResource {
     return this.httpClient.put<Subscription>(`${this.resourcePath}/${subscriptionId}/activate`, data || {});
   }
 
-  async cancel(subscriptionId: string, data: PauseSubscriptionRequest): Promise<Subscription> {
+  async cancel(subscriptionId: string, data: CancelSubscriptionRequest): Promise<Subscription> {
     return this.httpClient.put<Subscription>(`${this.resourcePath}/${subscriptionId}/cancel`, data);
   }
 

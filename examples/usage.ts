@@ -13,7 +13,7 @@ import { GetPaidHQClient } from '../src';
 const getpaidhq = new GetPaidHQClient({ 
   apiKey: 'sk_test_your_api_key_here',
   // For test environment:
-  baseURL: 'https://api.test.getpaidhq.com'
+  baseURL: 'https://api.test.getpaidhq.co'
 });
 
 async function main() {
