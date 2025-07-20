@@ -48,7 +48,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "type-check": "tsc --noEmit",
     "prepublishOnly": "pnpm run build",
-    "prepare": "husky || true",
+    "postinstall": "husky || true",
     "semantic-release": "semantic-release",
     "preinstall": "npx only-allow pnpm"
   },
