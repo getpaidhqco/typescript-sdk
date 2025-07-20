@@ -1,5 +1,8 @@
 import { AuthManager } from './auth/auth';
 import { HttpClient, HttpClientConfig } from './utils/http-client';
+
+// Export HttpClient for advanced use cases
+export { HttpClient } from './utils/http-client';
 import {
   CustomersResource,
   ProductsResource,
@@ -63,7 +66,7 @@ export interface GetPaidHQClientConfig {
 
 export class GetPaidHQClient {
   private authManager: AuthManager;
-  private httpClient: HttpClient;
+  public readonly httpClient: HttpClient;
 
   // Resources
   public readonly customers: CustomersResource;

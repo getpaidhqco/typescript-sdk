@@ -115,9 +115,10 @@ const invoices = await client.customers.listInvoices('customer-123', {
 
 // Payment methods
 const paymentMethod = await client.customers.createPaymentMethod('customer-123', {
+  name: 'Primary Card',
   type: 'card',
-  provider: 'paystack',
-  provider_payment_method_id: 'pm_xyz',
+  psp: 'paystack',
+  token: 'pm_xyz',
   is_default: true,
 });
 ```
@@ -169,28 +170,31 @@ const subscription = await client.subscriptions.create({
 
 // Pause a subscription
 await client.subscriptions.pause(subscription.id, {
-  behavior: 'keep_as_draft',
+  reason: 'Customer requested pause',
+  pause_mode: 'temporary',
+  resume_at: '2024-02-01T00:00:00Z',
 });
 
 // Resume a subscription
 await client.subscriptions.resume(subscription.id, {
-  billing_cycle_anchor: 'now',
+  reason: 'Customer requested resume',
+  resume_behavior: 'start_new_period',
+  proration_mode: 'credit_unused',
 });
 
 // Cancel a subscription
 await client.subscriptions.cancel(subscription.id, {
-  behavior: 'mark_uncollectible',
+  reason: 'Customer requested cancellation',
+  cancel_at: 'period_end',
 });
 
 // Change subscription plan
 const result = await client.subscriptions.changePlan(subscription.id, {
-  items: [
-    {
-      price_id: 'new-price-id',
-      quantity: 1,
-    },
-  ],
-  proration_behavior: 'create_prorations',
+  new_variant_id: 'variant-123',
+  new_price_id: 'new-price-id',
+  proration_mode: 'immediate',
+  effective_date: 'immediate',
+  reason: 'Customer upgrade',
 });
 ```
 
@@ -239,15 +243,10 @@ const estimate = await client.subscriptions.getUsageEstimate('sub_123');
 const meter = await client.meters.create({
   name: 'API Calls',
   slug: 'api-calls',
-  event_type: 'api_request',
-  aggregation_method: 'count',
-  filters: [
-    {
-      property: 'environment',
-      operator: 'eq',
-      value: 'production',
-    },
-  ],
+  event_name: 'api_request',
+  aggregation_type: 'sum',
+  value_property: 'count',
+  unit_type: 'requests',
 });
 
 // Get meter by slug
@@ -265,7 +264,7 @@ const invoice = await client.invoices.create({
     {
       description: 'Premium subscription',
       quantity: 1,
-      unit_amount: 9999, // $99.99 in cents
+      unit_price: 9999, // $99.99 in cents
     },
   ],
 });
@@ -304,8 +303,8 @@ const gateways = await client.gateways.list();
 // Create an organization (onboarding)
 const org = await client.organizations.create({
   name: 'Tech Corp',
-  email: 'admin@techcorp.com',
-  website: 'https://techcorp.com',
+  country: 'US',
+  timezone: 'America/New_York',
 });
 
 // Get API keys

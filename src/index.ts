@@ -48,6 +48,7 @@ export type {
   CreateSubscriptionRequest,
   UpdateSubscriptionRequest,
   SubscriptionListParams,
+  SubscriptionStatus,
   PauseSubscriptionRequest,
   ResumeSubscriptionRequest,
   CancelSubscriptionRequest,
