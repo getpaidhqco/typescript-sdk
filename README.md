@@ -147,13 +147,11 @@ const variant = await client.products.createVariant(product.id, {
 const price = await client.prices.create({
   variant_id: variant.id,
   currency: 'USD',
-  type: 'recurring',
-  billing_scheme: 'per_unit',
-  amount: 9999, // $99.99 in cents
-  recurring: {
-    interval: 'month',
-    interval_count: 1,
-  },
+  category: 'subscription',
+  scheme: 'fixed',
+  unit_price: 9999, // $99.99 in cents
+  billing_interval: 'month',
+  billing_interval_qty: 1,
 });
 ```
 
@@ -163,13 +161,14 @@ const price = await client.prices.create({
 // Create a subscription
 const subscription = await client.subscriptions.create({
   customer_id: customer.id,
+  currency: 'USD',
   items: [
     {
       price_id: price.id,
+      name: 'Premium Plan',
       quantity: 1,
     },
   ],
-  trial_period_days: 14,
 });
 
 // Pause a subscription

@@ -39,18 +39,17 @@ export interface SubscriptionItem extends BaseEntity {
 
 export interface CreateSubscriptionRequest {
   customer_id: string;
+  payment_method_id?: string;
+  currency: string;
   items: CreateSubscriptionItemRequest[];
-  trial_period_days?: number;
-  trial_end?: DateTime;
-  billing_cycle_anchor?: DateTime;
-  default_payment_method_id?: string;
   metadata?: Metadata;
 }
 
 export interface CreateSubscriptionItemRequest {
   price_id: string;
-  quantity?: number;
+  name: string;
   description?: string;
+  quantity?: number;
   metadata?: Metadata;
 }
 
