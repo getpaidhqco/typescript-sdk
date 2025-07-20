@@ -10,4 +10,4 @@
 
 ### Bug Fixes
 
-* removed unused docs ([5e4ff1b](https://github.com/getpaidhqco/gphq-ts-sdk/commit/5e4ff1b358071a1fd25ec3443bd56365de3f299c))
+* removed unused docs ([5e4ff1b](https://github.com/getpaidhqco/typescript-sdk/commit/5e4ff1b358071a1fd25ec3443bd56365de3f299c))

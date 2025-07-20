@@ -515,7 +515,7 @@ For detailed API documentation, visit [https://docs.getpaidhq.co/api](https://do
 
 - Documentation: [https://docs.getpaidhq.co](https://docs.getpaidhq.co)
 - Email: support@getpaidhq.co
-- Issues: [GitHub Issues](https://github.com/getpaidhq/typescript-sdk/issues)
+- Issues: [GitHub Issues](https://github.com/getpaidhqco/typescript-sdk/issues)
 
 ## License
 
