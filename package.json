@@ -38,11 +38,11 @@
     "sdk",
     "typescript"
   ],
-  "author": "GetPaidHQ <support@getpaidhq.com>",
+  "author": "GetPaidHQ <support@getpaidhq.co>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/getpaidhq/typescript-sdk"
+    "url": "git+https://github.com/getpaidhq/typescript-sdk.git"
   },
   "bugs": {
     "url": "https://github.com/getpaidhq/typescript-sdk/issues"
