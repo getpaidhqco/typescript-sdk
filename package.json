@@ -1,0 +1,73 @@
+{
+  "name": "@getpaidhq/sdk",
+  "version": "1.0.0",
+  "description": "TypeScript SDK for GetPaidHQ API - Comprehensive subscription billing platform",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "type-check": "tsc --noEmit",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [
+    "getpaidhq",
+    "billing",
+    "subscription",
+    "payments",
+    "api",
+    "sdk",
+    "typescript"
+  ],
+  "author": "GetPaidHQ <support@getpaidhq.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/getpaidhq/typescript-sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/getpaidhq/typescript-sdk/issues"
+  },
+  "homepage": "https://getpaidhq.com",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "axios-retry": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.0",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
+    "@vitest/coverage-v8": "^2.1.5",
+    "eslint": "^9.13.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "msw": "^2.6.0",
+    "prettier": "^3.3.3",
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
+}
