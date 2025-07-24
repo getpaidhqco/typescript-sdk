@@ -93,7 +93,7 @@ export class GetPaidHQClient {
 
   constructor(config: GetPaidHQClientConfig) {
     // Validate auth config
-    if (!config.apiKey && !config.bearerToken) {
+    if (!config.apiKey && !config.getToken) {
       throw new Error('Either apiKey or bearerToken must be provided');
     }
 

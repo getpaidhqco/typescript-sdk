@@ -15,7 +15,7 @@ describe('GetPaidHQ SDK', () => {
 
   it('should initialize with bearer token', () => {
     const client = new GetPaidHQClient({
-      bearerToken: 'test_bearer_token',
+      getToken: async () => 'test_bearer_token',
     });
 
     expect(client).toBeDefined();
