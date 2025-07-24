@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/getpaidhqco/typescript-sdk/compare/v1.0.4...v1.0.5) (2025-07-24)
+
+
+### Bug Fixes
+
+* module exports ([e4b033a](https://github.com/getpaidhqco/typescript-sdk/commit/e4b033a90323b894cf7455ed8879e7fcaf5ed48d))
+
 ## [1.0.4](https://github.com/getpaidhqco/typescript-sdk/compare/v1.0.3...v1.0.4) (2025-07-24)
 
 
