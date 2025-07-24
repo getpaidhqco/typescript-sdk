@@ -1,6 +1,6 @@
 {
   "name": "@getpaidhq/sdk",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "TypeScript SDK for GetPaidHQ API - Comprehensive subscription billing platform",
   "type": "module",
   "main": "./dist/index.js",
