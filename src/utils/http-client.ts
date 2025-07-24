@@ -23,7 +23,6 @@ export class HttpClient {
       timeout: config.timeout || 30000,
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': config.userAgent || '@getpaidhq/sdk/1.0.0',
       },
     });
 
@@ -45,8 +44,8 @@ export class HttpClient {
 
     // Request interceptor for authentication
     this.client.interceptors.request.use(
-      (config) => {
-        const authConfig = this.authManager.applyAuth(config);
+      async (config) => {
+        const authConfig = await this.authManager.applyAuth(config);
         return authConfig as any;
       },
       (error) => Promise.reject(error),

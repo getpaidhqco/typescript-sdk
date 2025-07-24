@@ -30,6 +30,10 @@ export interface GetPaidHQClientConfig {
   apiKey?: string;
 
   /**
+   * Async function that returns bearer token for OAuth authentication
+   */
+  getToken?: () => Promise<string | null>;
+  /**
    * Bearer token for OAuth authentication
    */
   bearerToken?: string;
@@ -96,7 +100,7 @@ export class GetPaidHQClient {
     // Initialize auth manager
     this.authManager = new AuthManager({
       apiKey: config.apiKey,
-      bearerToken: config.bearerToken,
+      getToken: config.getToken,
     });
 
     // Initialize HTTP client
@@ -140,9 +144,7 @@ export class GetPaidHQClient {
   /**
    * Update bearer token for authentication
    */
-  updateBearerToken(bearerToken: string): void {
-    this.authManager.updateBearerToken(bearerToken);
-  }
+  updateBearerToken(_bearerToken: string): void {}
 
   /**
    * Check API health
