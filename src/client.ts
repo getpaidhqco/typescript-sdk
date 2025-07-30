@@ -21,6 +21,8 @@ import {
   SettingsResource,
   GatewaysResource,
   SessionsResource,
+  DiscountsResource,
+  PaymentLinksResource,
 } from './resources';
 
 export interface GetPaidHQClientConfig {
@@ -90,6 +92,8 @@ export class GetPaidHQClient {
   public readonly settings: SettingsResource;
   public readonly gateways: GatewaysResource;
   public readonly sessions: SessionsResource;
+  public readonly discounts: DiscountsResource;
+  public readonly paymentLinks: PaymentLinksResource;
 
   constructor(config: GetPaidHQClientConfig) {
     // Validate auth config
@@ -132,6 +136,8 @@ export class GetPaidHQClient {
     this.settings = new SettingsResource(this.httpClient);
     this.gateways = new GatewaysResource(this.httpClient);
     this.sessions = new SessionsResource(this.httpClient);
+    this.discounts = new DiscountsResource(this.httpClient);
+    this.paymentLinks = new PaymentLinksResource(this.httpClient);
   }
 
   /**

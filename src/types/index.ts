@@ -15,3 +15,5 @@ export * from './dunning';
 export * from './webhooks';
 export * from './reports';
 export * from './sessions';
+export * from './discounts';
+export * from './payment-links';

@@ -12,6 +12,7 @@ import {
   Order,
 } from '../types';
 import { PaymentMethod } from '../types/payments';
+import { DiscountRedemption, ListDiscountRedemptionsParams } from '../types/discounts';
 
 export class CustomersResource {
   private readonly resourcePath = '/api/customers';
@@ -120,5 +121,18 @@ export class CustomersResource {
 
   async getDunningHistory(customerId: string): Promise<any[]> {
     return this.httpClient.get<any[]>(`${this.resourcePath}/${customerId}/dunning-history`);
+  }
+
+  /**
+   * List customer discount redemptions
+   */
+  async listDiscountRedemptions(
+    customerId: string,
+    params?: ListDiscountRedemptionsParams,
+  ): Promise<ListResponse<DiscountRedemption>> {
+    const queryString = this.buildQueryString(params);
+    return this.httpClient.get<ListResponse<DiscountRedemption>>(
+      `${this.resourcePath}/${customerId}/discount-redemptions${queryString}`,
+    );
   }
 }

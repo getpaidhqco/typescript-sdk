@@ -48,11 +48,24 @@ export class OrdersResource {
     return this.httpClient.post<Order>(`${this.resourcePath}/${orderId}/complete`, data);
   }
 
-  async addItem(orderId: string, data: AddCartItemRequest): Promise<Order> {
-    return this.httpClient.post<Order>(`${this.resourcePath}/${orderId}/items`, data);
+  /**
+   * Add item to cart
+   */
+  async addCartItem(cartId: string, data: AddCartItemRequest): Promise<{ status: string }> {
+    return this.httpClient.post<{ status: string }>(`/api/carts/${cartId}/add`, data);
   }
 
-  async removeItem(orderId: string, data: RemoveCartItemRequest): Promise<Order> {
-    return this.httpClient.delete<Order>(`${this.resourcePath}/${orderId}/items`, { data });
+  /**
+   * Remove item from cart
+   */
+  async removeCartItem(cartId: string, data: RemoveCartItemRequest): Promise<{ status: string }> {
+    return this.httpClient.post<{ status: string }>(`/api/carts/${cartId}/remove`, data);
+  }
+
+  /**
+   * List subscriptions created from an order
+   */
+  async listSubscriptions(orderId: string): Promise<any[]> {
+    return this.httpClient.get<any[]>(`${this.resourcePath}/${orderId}/subscriptions`);
   }
 }
