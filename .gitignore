@@ -39,3 +39,4 @@ lerna-debug.log*
 .cache/
 .temp/
 .tmp/
+.serena/cache
