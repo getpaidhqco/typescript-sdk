@@ -135,3 +135,10 @@ export interface InvoiceListParams extends PaginationParams {
   status?: InvoiceStatus;
   customer_id?: string;
 }
+
+export interface CreateInvoicePaymentLinkRequest {
+  expires_at?: DateTime;
+  success_url?: string;
+  cancel_url?: string;
+  config?: Record<string, any>;
+}

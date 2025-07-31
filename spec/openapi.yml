@@ -5,7 +5,7 @@ info:
     Comprehensive subscription billing platform API supporting traditional subscriptions, 
     usage-based billing, and hybrid models with advanced features like dunning management, 
     multi-currency support, and enterprise-grade security.
-  version: 1.0.1
+  version: 1.0.2
   contact:
     name: GetPaidHQ Support
     url: https://getpaidhq.co
@@ -1632,6 +1632,32 @@ paths:
               schema:
                 type: string
                 format: binary
+
+  /api/invoices/{id}/payment-link:
+    post:
+      tags: [Invoices]
+      summary: Create payment link for invoice
+      description: Creates a single-use payment link for a specific invoice with optional customization
+      operationId: createInvoicePaymentLink
+      parameters:
+        - $ref: '#/components/parameters/InvoiceId'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInvoicePaymentLinkRequest'
+      responses:
+        '201':
+          description: Payment link created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentLinkResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   # Dunning Management
   /api/dunning/campaigns:
@@ -3434,6 +3460,26 @@ components:
           type: string
           format: date-time
           description: Expiration timestamp
+
+    CreateInvoicePaymentLinkRequest:
+      type: object
+      properties:
+        expires_at:
+          type: string
+          format: date-time
+          description: Optional expiration timestamp (defaults to invoice due date)
+        success_url:
+          type: string
+          format: uri
+          description: URL to redirect to after successful payment
+        cancel_url:
+          type: string
+          format: uri
+          description: URL to redirect to after cancelled payment
+        config:
+          type: object
+          additionalProperties: true
+          description: Additional payment link configuration overrides
 
     RecordPaymentLinkUsageRequest:
       type: object

@@ -6,6 +6,7 @@ export interface ListResponse<T> {
     total: number;
     page: number;
     limit: number;
+    has_more: boolean;
   };
 }
 

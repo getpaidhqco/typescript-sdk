@@ -9,7 +9,9 @@ import {
   InvoiceHistory,
   ListResponse,
   InvoiceListParams,
+  CreateInvoicePaymentLinkRequest,
 } from '../types';
+import { PaymentLinkResponse } from '../types/payment-links';
 
 export class InvoicesResource {
   private readonly resourcePath = '/api/invoices';
@@ -117,5 +119,18 @@ export class InvoicesResource {
       },
     );
     return response.data;
+  }
+
+  /**
+   * Create payment link for invoice
+   */
+  async createPaymentLink(
+    invoiceId: string,
+    data?: CreateInvoicePaymentLinkRequest,
+  ): Promise<PaymentLinkResponse> {
+    return this.httpClient.post<PaymentLinkResponse>(
+      `${this.resourcePath}/${invoiceId}/payment-link`,
+      data || {},
+    );
   }
 }
