@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/getpaidhqco/typescript-sdk/compare/v1.1.0...v1.2.0) (2025-07-31)
+
+
+### Features
+
+* updated spec ([711e109](https://github.com/getpaidhqco/typescript-sdk/commit/711e1090b6321049feabe7d77a0a862fe56eb374))
+
 # [1.1.0](https://github.com/getpaidhqco/typescript-sdk/compare/v1.0.5...v1.1.0) (2025-07-30)
 
 
