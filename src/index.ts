@@ -2,6 +2,9 @@
 export { GetPaidHQClient } from './client';
 export type { GetPaidHQClientConfig } from './client';
 
+// Export version
+export const SPEC_VERSION = '1.0.2';
+
 // Export individual resources for tree-shaking
 export {
   CustomersResource,
@@ -21,6 +24,9 @@ export {
   SettingsResource,
   GatewaysResource,
   SessionsResource,
+  DiscountsResource,
+  PaymentLinksResource,
+  CartsResource,
 } from './resources';
 
 // Export commonly used types (tree-shakeable)
@@ -123,5 +129,4 @@ export {
   ServerError,
 } from './errors/errors';
 
-// Export version
-export const VERSION = '1.0.0';
+

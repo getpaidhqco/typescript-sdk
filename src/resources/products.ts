@@ -85,38 +85,12 @@ export class VariantsResource {
   async listPrices(variantId: string): Promise<Price[]> {
     return this.httpClient.get<Price[]>(`${this.resourcePath}/${variantId}/prices`);
   }
-
-  async createPrice(variantId: string, data: CreatePriceRequest): Promise<Price> {
-    return this.httpClient.post<Price>(`${this.resourcePath}/${variantId}/prices`, data);
-  }
 }
 
 export class PricesResource {
   private readonly resourcePath = '/api/prices';
 
   constructor(private httpClient: HttpClient) {}
-
-  private buildQueryString(params?: Record<string, any>): string {
-    if (!params) return '';
-
-    const query = Object.entries(params)
-      .filter(([_, value]) => value !== undefined && value !== null)
-      .map(([key, value]) => {
-        if (Array.isArray(value)) {
-          return value.map((v) => `${key}[]=${encodeURIComponent(v)}`).join('&');
-        }
-        return `${key}=${encodeURIComponent(value)}`;
-      })
-      .join('&');
-
-    return query ? `?${query}` : '';
-  }
-
-  async list(params?: PaginationParams): Promise<ListResponse<Price>> {
-    return this.httpClient.get<ListResponse<Price>>(
-      `${this.resourcePath}${this.buildQueryString(params)}`,
-    );
-  }
 
   async create(data: CreatePriceRequest): Promise<Price> {
     return this.httpClient.post<Price>(this.resourcePath, data);

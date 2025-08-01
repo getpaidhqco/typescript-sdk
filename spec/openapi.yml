@@ -41,6 +41,8 @@ tags:
     description: Subscription lifecycle management
   - name: Orders
     description: Order processing and management
+  - name: Carts
+    description: Shopping cart management
   - name: Payments
     description: Payment processing and refunds
   - name: Invoices
@@ -1256,7 +1258,7 @@ paths:
   # Shopping Cart
   /api/carts/{id}/add:
     post:
-      tags: [Orders]
+      tags: [Carts]
       summary: Add item to cart
       operationId: addCartItem
       parameters:
@@ -1278,15 +1280,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: "added"
+                $ref: '#/components/schemas/CartResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
 
   /api/carts/{id}/remove:
     post:
-      tags: [Orders]
+      tags: [Carts]
       summary: Remove item from cart
       operationId: removeCartItem
       parameters:
@@ -1308,11 +1308,49 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/CartResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /api/carts/{id}/validate-coupon:
+    post:
+      tags: [Carts]
+      summary: Validate coupon code for cart
+      description: Validates a coupon code and applies it to the cart if valid
+      operationId: validateCartCoupon
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Cart ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateCouponRequest'
+      responses:
+        '200':
+          description: Coupon validated and applied to cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        '400':
+          description: Invalid coupon code
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  status:
+                  error:
                     type: string
-                    example: "removed"
+                    example: "Invalid coupon code"
+                  message:
+                    type: string
+                    example: "Coupon code has expired"
 
   # Payments
   /api/payments:
@@ -2132,117 +2170,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
-  /api/discounts/validate:
-    post:
-      tags: [Discounts]
-      summary: Validate discount code
-      operationId: validateDiscountCode
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ValidateDiscountRequest'
-      responses:
-        '200':
-          description: Discount code validation result
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DiscountValidationResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          description: Discount code not found or invalid
-
-  /api/discounts/apply:
-    post:
-      tags: [Discounts]
-      summary: Apply discount
-      operationId: applyDiscount
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ApplyDiscountRequest'
-      responses:
-        '200':
-          description: Discount applied successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DiscountApplicationResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          description: Discount not found or invalid
-        '422':
-          $ref: '#/components/responses/ValidationError'
-
-  /api/discounts/{id}/redemptions:
-    get:
-      tags: [Discounts]
-      summary: List discount redemptions
-      operationId: listDiscountRedemptions
-      parameters:
-        - $ref: '#/components/parameters/DiscountId'
-        - $ref: '#/components/parameters/Page'
-        - $ref: '#/components/parameters/Limit'
-        - name: customer_id
-          in: query
-          schema:
-            type: string
-          description: Filter by customer ID
-        - name: resource_type
-          in: query
-          schema:
-            type: string
-            enum: [subscription, invoice, payment, checkout_session]
-          description: Filter by resource type
-      responses:
-        '200':
-          description: List of discount redemptions
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/ListResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/DiscountRedemption'
-        '404':
-          $ref: '#/components/responses/NotFound'
-
-  /api/customers/{id}/discount-redemptions:
-    get:
-      tags: [Customers]
-      summary: List customer discount redemptions
-      operationId: listCustomerDiscountRedemptions
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
-        - $ref: '#/components/parameters/Page'
-        - $ref: '#/components/parameters/Limit'
-      responses:
-        '200':
-          description: List of customer discount redemptions
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/ListResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/DiscountRedemption'
-        '404':
-          $ref: '#/components/responses/NotFound'
-
   # Payment Links
   /api/payment-links:
     get:
@@ -3005,9 +2932,6 @@ components:
         limit:
           type: integer
           description: Items per page
-        has_more:
-          type: boolean
-          description: Whether there are more pages
 
     ApiError:
       type: object
@@ -4068,7 +3992,7 @@ components:
 
     AddCartItemRequest:
       type: object
-      required: [product_id, price_id, quantity]
+      required: [product_id, price_id]
       properties:
         product_id:
           type: string
@@ -4077,13 +4001,66 @@ components:
         quantity:
           type: integer
           minimum: 1
+          default: 1
 
     RemoveCartItemRequest:
       type: object
-      required: [product_id]
+      required: [id]
       properties:
-        product_id:
+        org_id:
           type: string
+        id:
+          type: string
+
+    ValidateCouponRequest:
+      type: object
+      required: [code]
+      properties:
+        code:
+          type: string
+          description: Coupon code to validate
+
+    CartResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              product_id:
+                type: string
+              price_id:
+                type: string
+              quantity:
+                type: integer
+              unit_price:
+                type: integer
+              total_price:
+                type: integer
+        subtotal:
+          type: integer
+        discounts:
+          type: array
+          items:
+            type: object
+            properties:
+              discount_id:
+                type: string
+              discount_amount:
+                type: integer
+        total:
+          type: integer
+        currency:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
 
     CreateInvoiceRequest:
       type: object

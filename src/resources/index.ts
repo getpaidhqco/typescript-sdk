@@ -15,3 +15,4 @@ export { GatewaysResource } from './gateways';
 export { SessionsResource } from './sessions';
 export { DiscountsResource } from './discounts';
 export { PaymentLinksResource } from './payment-links';
+export { CartsResource } from './carts';

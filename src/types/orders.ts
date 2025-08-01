@@ -1,4 +1,5 @@
 import { BaseEntity, Currency, Metadata, PaginationParams } from './common';
+import { Product, Price } from './products';
 
 export type OrderStatus =
   | 'pending'
@@ -78,6 +79,41 @@ export interface AddCartItemRequest {
 export interface RemoveCartItemRequest {
   product_id: string;
 }
+
+export interface ValidateCouponRequest {
+  coupon_code: string;
+}
+
+export interface Cart {
+  id: string;
+  customer_id?: string;
+  items: CartItem[];
+  discounts?: CartDiscount[];
+  subtotal_amount: number;
+  discount_amount: number;
+  total_amount: number;
+  currency: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CartItem {
+  product_id: string;
+  price_id: string;
+  quantity: number;
+  unit_amount: number;
+  total_amount: number;
+  product?: Product;
+  price?: Price;
+}
+
+export interface CartDiscount {
+  discount_id: string;
+  amount: number;
+  type: 'fixed' | 'percentage';
+}
+
+export interface CartResponse extends Cart {}
 
 export interface OrderListParams extends PaginationParams {
   status?: OrderStatus;
