@@ -20,6 +20,9 @@ export class CartsResource {
   }
 
   async validateCoupon(cartId: string, data: ValidateCouponRequest): Promise<CartResponse> {
-    return this.httpClient.post<CartResponse>(`${this.resourcePath}/${cartId}/validate-coupon`, data);
+    return this.httpClient.post<CartResponse>(
+      `${this.resourcePath}/${cartId}/validate-coupon`,
+      data,
+    );
   }
 }
