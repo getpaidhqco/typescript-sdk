@@ -142,3 +142,34 @@ export interface CreateInvoicePaymentLinkRequest {
   cancel_url?: string;
   config?: Record<string, any>;
 }
+
+export interface InitiateInvoicePaymentRequest {
+  payment_processor: 'paystack' | 'checkout_com';
+  billing_address?: {
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    phone?: string;
+    line1?: string;
+    line2?: string;
+    city?: string;
+    state?: string;
+    postal_code?: string;
+    country?: string;
+  };
+  success_url?: string;
+  cancel_url?: string;
+  metadata?: Record<string, string>;
+}
+
+export interface InitiatePaymentResponse {
+  order_id: string;
+  payment_processor: 'paystack' | 'checkout_com';
+  redirect_url?: string;
+  client_secret?: string;
+  session_id?: string;
+  amount: number;
+  currency: string;
+  status: 'pending';
+  reference: string;
+}

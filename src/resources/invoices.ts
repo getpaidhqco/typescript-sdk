@@ -10,6 +10,8 @@ import {
   ListResponse,
   InvoiceListParams,
   CreateInvoicePaymentLinkRequest,
+  InitiateInvoicePaymentRequest,
+  InitiatePaymentResponse,
 } from '../types';
 import { PaymentLinkResponse } from '../types/payment-links';
 
@@ -131,6 +133,19 @@ export class InvoicesResource {
     return this.httpClient.post<PaymentLinkResponse>(
       `${this.resourcePath}/${invoiceId}/payment-link`,
       data || {},
+    );
+  }
+
+  /**
+   * Initiate payment for invoice
+   */
+  async initiatePayment(
+    invoiceId: string,
+    data: InitiateInvoicePaymentRequest,
+  ): Promise<InitiatePaymentResponse> {
+    return this.httpClient.post<InitiatePaymentResponse>(
+      `${this.resourcePath}/${invoiceId}/initiate-payment`,
+      data,
     );
   }
 }

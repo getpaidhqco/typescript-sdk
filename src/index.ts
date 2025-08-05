@@ -77,6 +77,8 @@ export type {
   CreateInvoiceRequest,
   UpdateInvoiceRequest,
   InvoiceListParams,
+  InitiateInvoicePaymentRequest,
+  InitiatePaymentResponse,
   // Order types
   Order,
   OrderItem,
