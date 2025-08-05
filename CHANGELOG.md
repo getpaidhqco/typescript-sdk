@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/getpaidhqco/typescript-sdk/compare/v1.3.0...v1.4.0) (2025-08-05)
+
+
+### Features
+
+* initiate-payment ([7956cb9](https://github.com/getpaidhqco/typescript-sdk/commit/7956cb9dc2fdc037c038abc93cc11765f3bf6ffd))
+
 # [1.3.0](https://github.com/getpaidhqco/typescript-sdk/compare/v1.2.0...v1.3.0) (2025-08-01)
 
 
