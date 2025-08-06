@@ -28,10 +28,12 @@ export class AuthManager {
       requestConfig.headers['Authorization'] = `Bearer ${await this.config.getToken()}`;
     } else if (this.config.token) {
       // Add token as query parameter for public endpoints
-      if (!requestConfig.params) {
-        requestConfig.params = {};
-      }
-      requestConfig.params.token = this.config.token;
+      // Ensure params object exists and merge with any existing params
+      // Merge our token with any existing params
+      requestConfig.params = {
+        ...requestConfig.params,
+        token: this.config.token,
+      };
     }
 
     return requestConfig;

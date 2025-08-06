@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { GetPaidHQClient } from '../src';
 
 describe('GetPaidHQ SDK', () => {
@@ -20,6 +20,35 @@ describe('GetPaidHQ SDK', () => {
 
     expect(client).toBeDefined();
   });
+  it('should initialize with token and append', async () => {
+    const client = new GetPaidHQClient({
+      baseURL: 'http://localhost:8081',
+      token: 'test_bearer_token',
+    });
+
+    // Test the AuthManager directly
+    const authManager = (client as any).authManager;
+    const testConfig = { headers: {}, url: '/test' };
+    const authResult = await authManager.applyAuth(testConfig);
+
+    console.log('Auth result:', JSON.stringify(authResult, null, 2));
+    console.log('Auth type:', authManager.getAuthType());
+
+    // Verify the token was added as a query parameter
+    expect(authResult.params).toBeDefined();
+    expect(authResult.params.token).toBe('test_bearer_token');
+    expect(client).toBeDefined();
+  });
+
+  it('should append token to actual HTTP request', async () => {
+    const client = new GetPaidHQClient({
+      baseURL: 'http://localhost:8081',
+      token: '29ad6e2ad7b5476c6829c9f239b95e03c20d8a4cbb92d6e9edd496bdc48e7b47',
+    });
+
+    await client.publicPayments.getPublicPaymentDetails('invoice-INV-20250806-0001-1754466395');
+
+  },50000000);
 
   it('should throw error without authentication', () => {
     expect(() => {
