@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/getpaidhqco/typescript-sdk/compare/v1.6.2...v1.6.3) (2025-08-06)
+
+
+### Bug Fixes
+
+* public order response ([1555bae](https://github.com/getpaidhqco/typescript-sdk/commit/1555bae8875ca334f7acbe011722da23ee285972))
+
 ## [1.6.2](https://github.com/getpaidhqco/typescript-sdk/compare/v1.6.1...v1.6.2) (2025-08-06)
 
 
