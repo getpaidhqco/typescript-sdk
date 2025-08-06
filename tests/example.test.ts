@@ -24,7 +24,7 @@ describe('GetPaidHQ SDK', () => {
   it('should throw error without authentication', () => {
     expect(() => {
       new GetPaidHQClient({} as any);
-    }).toThrow('Either apiKey or bearerToken must be provided');
+    }).toThrow('Either apiKey, bearerToken, or token must be provided');
   });
 
   it('should allow updating authentication', () => {

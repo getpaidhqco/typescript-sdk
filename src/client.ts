@@ -43,6 +43,11 @@ export interface GetPaidHQClientConfig {
   bearerToken?: string;
 
   /**
+   * Token for public payment endpoints (used as query parameter)
+   */
+  token?: string;
+
+  /**
    * Base URL for the API
    * @default https://api.getpaidhq.co
    */
@@ -100,15 +105,16 @@ export class GetPaidHQClient {
   public readonly publicPayments: PublicPaymentsResource;
 
   constructor(config: GetPaidHQClientConfig) {
-    // Validate auth config
-    if (!config.apiKey && !config.getToken) {
-      throw new Error('Either apiKey or bearerToken must be provided');
+    // Validate auth config - allow token as standalone auth for public endpoints only
+    if (!config.apiKey && !config.getToken && !config.token) {
+      throw new Error('Either apiKey, bearerToken, or token must be provided');
     }
 
     // Initialize auth manager
     this.authManager = new AuthManager({
       apiKey: config.apiKey,
       getToken: config.getToken,
+      token: config.token,
     });
 
     // Initialize HTTP client

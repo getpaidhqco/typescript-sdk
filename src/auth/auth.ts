@@ -3,14 +3,15 @@ import { AxiosRequestConfig } from 'axios';
 export interface AuthConfig {
   apiKey?: string;
   getToken?: () => Promise<string | null>;
+  token?: string;
 }
 
 export class AuthManager {
   private config: AuthConfig;
 
   constructor(config: AuthConfig) {
-    if (!config.apiKey && !config.getToken) {
-      throw new Error('Either apiKey or bearerToken must be provided');
+    if (!config.apiKey && !config.getToken && !config.token) {
+      throw new Error('Either apiKey, bearerToken, or token must be provided');
     }
     this.config = config;
   }
@@ -20,11 +21,17 @@ export class AuthManager {
       requestConfig.headers = {};
     }
 
-    // API Key takes precedence over Bearer token
+    // API Key takes precedence over Bearer token, token is used as query parameter
     if (this.config.apiKey) {
       requestConfig.headers['X-API-Key'] = this.config.apiKey;
-    } else {
-      requestConfig.headers['Authorization'] = `Bearer ${await this.config.getToken?.()}`;
+    } else if (this.config.getToken) {
+      requestConfig.headers['Authorization'] = `Bearer ${await this.config.getToken()}`;
+    } else if (this.config.token) {
+      // Add token as query parameter for public endpoints
+      if (!requestConfig.params) {
+        requestConfig.params = {};
+      }
+      requestConfig.params.token = this.config.token;
     }
 
     return requestConfig;
@@ -34,8 +41,10 @@ export class AuthManager {
     this.config.apiKey = apiKey;
   }
 
-  getAuthType(): 'apiKey' | 'bearer' | null {
+  getAuthType(): 'apiKey' | 'bearer' | 'token' | null {
     if (this.config.apiKey) return 'apiKey';
-    return 'bearer';
+    if (this.config.getToken) return 'bearer';
+    if (this.config.token) return 'token';
+    return null;
   }
 }
