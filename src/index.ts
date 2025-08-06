@@ -3,7 +3,7 @@ export { GetPaidHQClient } from './client';
 export type { GetPaidHQClientConfig } from './client';
 
 // Export version
-export const SPEC_VERSION = '1.0.2';
+export const SPEC_VERSION = '1.0.5';
 
 // Export individual resources for tree-shaking
 export {
@@ -27,6 +27,7 @@ export {
   DiscountsResource,
   PaymentLinksResource,
   CartsResource,
+  PublicPaymentsResource,
 } from './resources';
 
 // Export commonly used types (tree-shakeable)
@@ -34,6 +35,9 @@ export type {
   // Common
   ListResponse,
   PaginationParams,
+  ErrorResponse,
+  ApiError,
+  Address,
   // Customer types
   Customer,
   CreateCustomerRequest,
@@ -115,6 +119,14 @@ export type {
   // Session types
   Session,
   CreateSessionRequest,
+  // Public Payments types
+  PublicPaymentDetailsResponse,
+  PublicInvoiceResponse,
+  PublicInvoiceLineItem,
+  PublicCustomerResponse,
+  PublicCreateOrderRequest,
+  PublicOrderResponse,
+  PublicOrderStatusResponse,
 } from './types';
 
 // Export all other types as wildcard (less tree-shakeable but comprehensive)

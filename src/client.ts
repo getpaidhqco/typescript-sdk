@@ -24,6 +24,7 @@ import {
   DiscountsResource,
   PaymentLinksResource,
   CartsResource,
+  PublicPaymentsResource,
 } from './resources';
 
 export interface GetPaidHQClientConfig {
@@ -96,6 +97,7 @@ export class GetPaidHQClient {
   public readonly discounts: DiscountsResource;
   public readonly paymentLinks: PaymentLinksResource;
   public readonly carts: CartsResource;
+  public readonly publicPayments: PublicPaymentsResource;
 
   constructor(config: GetPaidHQClientConfig) {
     // Validate auth config
@@ -141,6 +143,7 @@ export class GetPaidHQClient {
     this.discounts = new DiscountsResource(this.httpClient);
     this.paymentLinks = new PaymentLinksResource(this.httpClient);
     this.carts = new CartsResource(this.httpClient);
+    this.publicPayments = new PublicPaymentsResource(this.httpClient);
   }
 
   /**

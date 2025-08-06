@@ -23,6 +23,12 @@ export interface ErrorResponse {
   details?: Record<string, any>;
 }
 
+export interface ApiError {
+  code: string;
+  message: string;
+  details?: string | Record<string, any>;
+}
+
 export interface Address {
   first_name?: string;
   last_name?: string;

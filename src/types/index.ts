@@ -17,3 +17,4 @@ export * from './reports';
 export * from './sessions';
 export * from './discounts';
 export * from './payment-links';
+export * from './public-payments';

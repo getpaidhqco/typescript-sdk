@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the official TypeScript SDK for GetPaidHQ API - a comprehensive subscription billing platform. The SDK is built with TypeScript and provides type-safe access to customers, products, subscriptions, usage-based billing, and other billing-related resources.
+This is the official TypeScript SDK for GetPaidHQ API - a comprehensive subscription billing platform. The SDK is built with TypeScript and provides type-safe access to customers, products, subscriptions, usage-based billing, public payments, and other billing-related resources.
 
 ## Development Commands
 
@@ -33,7 +33,7 @@ This is the official TypeScript SDK for GetPaidHQ API - a comprehensive subscrip
 - `GetPaidHQClient` - Main SDK client class that orchestrates all resources
 - `AuthManager` - Handles API key and Bearer token authentication
 - `HttpClient` - Axios-based HTTP client with retry logic and error handling
-- Resource classes - Individual API resource handlers (customers, products, subscriptions, usage)
+- Resource classes - Individual API resource handlers (customers, products, subscriptions, usage, public payments, carts, etc.)
 
 **Authentication:**
 - Supports API key authentication (x-api-key header) and Bearer token authentication
@@ -65,3 +65,23 @@ This is the official TypeScript SDK for GetPaidHQ API - a comprehensive subscrip
 - Vitest for unit testing with V8 coverage
 - MSW for API mocking in tests
 - Test configuration excludes build artifacts and type definitions
+
+## Recent Updates
+
+**OpenAPI Spec Version 1.0.3 Implementation:**
+- Updated SPEC_VERSION to '1.0.3' in src/index.ts
+- Added Public Payments feature with 3 new endpoints:
+  - `GET /api/pay/{slug}` - Get public payment details (no auth required)
+  - `POST /api/pay/{slug}/create-order` - Create public payment order
+  - `GET /api/pay/{slug}/order/{orderId}/status` - Get public order status
+- Created PublicPaymentsResource class with comprehensive type definitions
+- Added Cart management functionality (CartsResource)
+- Enhanced invoice payment capabilities with initiate payment endpoint
+
+**Available Resources:**
+- CustomersResource, ProductsResource, VariantsResource, PricesResource
+- SubscriptionsResource, UsageResource, OrganizationsResource, MetersResource
+- OrdersResource, PaymentsResource, InvoicesResource, DunningResource
+- WebhooksResource, ReportsResource, SettingsResource, GatewaysResource
+- SessionsResource, DiscountsResource, PaymentLinksResource, CartsResource
+- PublicPaymentsResource (new)
