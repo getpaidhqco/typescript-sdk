@@ -1,6 +1,6 @@
 # @getpaidhq/sdk
 
-Official TypeScript SDK for the GetPaidHQ API - A comprehensive subscription billing platform supporting traditional subscriptions, usage-based billing, and hybrid models.
+Official TypeScript SDK for the GetPaidHQ API (v1.0.5) - A comprehensive subscription billing platform supporting traditional subscriptions, usage-based billing, hybrid models, and public payments.
 
 - Website: [getpaidhq.co](https://getpaidhq.co)
 - Developer Guide: [getpaidhq.co/docs/developer-guide](https://getpaidhq.co/docs/developer-guide)
@@ -44,7 +44,7 @@ const customer = await client.customers.create({
 
 ## Authentication
 
-The SDK supports two authentication methods:
+The SDK supports three authentication methods:
 
 ### API Key Authentication
 
@@ -59,6 +59,15 @@ const client = new GetPaidHQClient({
 ```typescript
 const client = new GetPaidHQClient({
   bearerToken: 'your_bearer_token', // OAuth/JWT token
+});
+```
+
+### Token Authentication (Public Payments)
+
+```typescript
+// For public payment endpoints only
+const client = new GetPaidHQClient({
+  token: 'your_public_payment_token', // Used as query parameter
 });
 ```
 
@@ -280,6 +289,13 @@ await client.invoices.markPaid(invoice.id);
 
 // Generate PDF
 const pdfBlob = await client.invoices.generatePdf(invoice.id);
+
+// Initiate payment for invoice
+const paymentInitiation = await client.invoices.initiatePayment(invoice.id, {
+  payment_processor: 'stripe',
+  success_url: 'https://yourapp.com/success',
+  cancel_url: 'https://yourapp.com/cancel',
+});
 ```
 
 ### Payment Gateways
@@ -318,6 +334,58 @@ const settings = await client.settings.list('org_123');
 await client.settings.update('org_123', {
   value: 'new_value',
   description: 'Updated setting',
+});
+```
+
+### Public Payments
+
+Public payment endpoints allow customers to pay invoices without authentication:
+
+```typescript
+// Initialize client with token for public payments
+const publicClient = new GetPaidHQClient({
+  token: 'your_public_payment_token',
+});
+
+// Get public payment details (no auth required)
+const paymentDetails = await publicClient.publicPayments.getPublicPaymentDetails('payment-slug');
+
+// Create public payment order
+const order = await publicClient.publicPayments.createPublicPaymentOrder('payment-slug', {
+  payment_processor: 'stripe',
+  customer_email: 'customer@example.com',
+  customer_name: 'John Doe',
+  success_url: 'https://yourapp.com/success',
+  cancel_url: 'https://yourapp.com/cancel',
+  metadata: {
+    custom_field: 'value',
+  },
+});
+
+// Check order status
+const orderStatus = await publicClient.publicPayments.getPublicOrderStatus(
+  'payment-slug',
+  order.order_id
+);
+```
+
+### Carts Management
+
+```typescript
+// Add item to cart
+const cart = await client.carts.addItem('cart-123', {
+  price_id: 'price_123',
+  quantity: 2,
+});
+
+// Remove item from cart
+await client.carts.removeItem('cart-123', {
+  cart_item_id: 'item_123',
+});
+
+// Validate coupon code
+const cartWithCoupon = await client.carts.validateCoupon('cart-123', {
+  coupon_code: 'DISCOUNT10',
 });
 ```
 

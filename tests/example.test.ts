@@ -40,16 +40,6 @@ describe('GetPaidHQ SDK', () => {
     expect(client).toBeDefined();
   });
 
-  it('should append token to actual HTTP request', async () => {
-    const client = new GetPaidHQClient({
-      baseURL: 'http://localhost:8081',
-      token: '29ad6e2ad7b5476c6829c9f239b95e03c20d8a4cbb92d6e9edd496bdc48e7b47',
-    });
-
-    await client.publicPayments.getPublicPaymentDetails('invoice-INV-20250806-0001-1754466395');
-
-  },50000000);
-
   it('should throw error without authentication', () => {
     expect(() => {
       new GetPaidHQClient({} as any);

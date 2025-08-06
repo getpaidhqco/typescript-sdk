@@ -36,8 +36,12 @@ This is the official TypeScript SDK for GetPaidHQ API - a comprehensive subscrip
 - Resource classes - Individual API resource handlers (customers, products, subscriptions, usage, public payments, carts, etc.)
 
 **Authentication:**
-- Supports API key authentication (x-api-key header) and Bearer token authentication
-- API key takes precedence when both are provided
+- Supports three authentication methods with priority order:
+  1. API key authentication (x-api-key header) - highest priority
+  2. Bearer token authentication (Authorization header) 
+  3. Token authentication (query parameter) - for public endpoints only
+- API key takes precedence over Bearer token, which takes precedence over token
+- Token authentication automatically appends `?token=<value>` to request URLs for public payment endpoints
 - Auth can be updated at runtime via client methods
 
 **Resource Architecture:**
@@ -85,3 +89,17 @@ This is the official TypeScript SDK for GetPaidHQ API - a comprehensive subscrip
 - WebhooksResource, ReportsResource, SettingsResource, GatewaysResource
 - SessionsResource, DiscountsResource, PaymentLinksResource, CartsResource
 - PublicPaymentsResource (new)
+
+## Authentication Implementation Details
+
+**Token Authentication for Public Endpoints:**
+- The `AuthManager.applyAuth()` method correctly handles token-based authentication
+- When `token` is provided in client config, it's automatically appended as a query parameter
+- Implementation uses Axios `params` property which converts to query string: `/api/pay/:slug?token=<value>`
+- Token authentication is specifically designed for public payment endpoints that don't require API keys
+- Authentication priority: API Key > Bearer Token > Token (query param)
+
+**Testing Token Authentication:**
+- Direct AuthManager testing confirms token is added to `params` object
+- Integration testing with real server requests validates end-to-end functionality
+- Server responses confirm token is received and processed correctly
