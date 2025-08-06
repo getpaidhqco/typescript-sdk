@@ -16,19 +16,32 @@ yarn add @getpaidhq/sdk
 pnpm add @getpaidhq/sdk
 ```
 
+## What's New in v1.0.5
+
+- **Public Payments**: New `PublicPaymentsResource` for handling public payment pages and orders without authentication
+- **Token Authentication**: Support for token-based authentication via query parameters for public endpoints
+- **Cart Management**: New `CartsResource` for shopping cart functionality
+- **Enhanced Invoice Payments**: Added `initiatePayment` method for invoice payment initiation
+- **Complete Resource Coverage**: All GetPaidHQ API resources now supported
+
 ## Quick Start
 
 ```typescript
 import { GetPaidHQClient } from '@getpaidhq/sdk';
 
-// Initialize with API key
+// Initialize with API key (recommended for backend applications)
 const client = new GetPaidHQClient({
   apiKey: 'sk_your_api_key',
 });
 
-// Or initialize with Bearer token
+// Or initialize with Bearer token (for OAuth/JWT authentication)
 const client = new GetPaidHQClient({
   bearerToken: 'your_bearer_token',
+});
+
+// Or initialize with token (for public payment endpoints)
+const publicClient = new GetPaidHQClient({
+  token: 'your_public_payment_token',
 });
 
 // Create a customer
@@ -448,7 +461,17 @@ import type {
   Subscription, 
   Invoice,
   CreateCustomerRequest,
-  SubscriptionStatus 
+  SubscriptionStatus,
+  // Public Payment types
+  PublicPaymentDetailsResponse,
+  PublicCreateOrderRequest,
+  PublicOrderResponse,
+  PublicOrderStatusResponse,
+  // Cart types  
+  CartResponse,
+  AddCartItemRequest,
+  RemoveCartItemRequest,
+  ValidateCouponRequest
 } from '@getpaidhq/sdk';
 
 // All types are fully typed
@@ -491,10 +514,20 @@ await customers.list();
 
 ```typescript
 // Import only specific resources
-import { CustomersResource, PaymentsResource } from '@getpaidhq/sdk/resources';
+import { 
+  CustomersResource, 
+  PaymentsResource,
+  PublicPaymentsResource,
+  CartsResource 
+} from '@getpaidhq/sdk/resources';
 
 // Import only specific types
-import type { Customer, Payment } from '@getpaidhq/sdk/types';
+import type { 
+  Customer, 
+  Payment,
+  PublicPaymentDetailsResponse,
+  CartResponse 
+} from '@getpaidhq/sdk/types';
 
 // Import only specific errors
 import { ValidationError, NotFoundError } from '@getpaidhq/sdk/errors';
@@ -507,12 +540,19 @@ import type {
   Customer,
   CreateCustomerRequest,
   Payment,
-  Invoice
+  Invoice,
+  PublicPaymentDetailsResponse,
+  PublicOrderResponse,
+  CartResponse
 } from '@getpaidhq/sdk';
 
 // These imports have zero runtime cost
 function processCustomer(customer: Customer): void {
   // Type-safe operations
+}
+
+function processPublicPayment(payment: PublicPaymentDetailsResponse): void {
+  // Type-safe public payment operations
 }
 ```
 
