@@ -1,3 +1,11 @@
+# [1.6.0](https://github.com/getpaidhqco/typescript-sdk/compare/v1.5.0...v1.6.0) (2025-08-06)
+
+
+### Features
+
+* payment-link updates with token ([2b19f9a](https://github.com/getpaidhqco/typescript-sdk/commit/2b19f9a6f44f53062590ade41afa5cfdaf952eb4))
+* payment-link updates with token ([54e9ffe](https://github.com/getpaidhqco/typescript-sdk/commit/54e9ffebb807856f440801cfe8c24fe7610e7e8e))
+
 # [1.5.0](https://github.com/getpaidhqco/typescript-sdk/compare/v1.4.0...v1.5.0) (2025-08-06)
 
 
