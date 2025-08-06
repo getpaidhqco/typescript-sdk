@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/getpaidhqco/typescript-sdk/compare/v1.6.1...v1.6.2) (2025-08-06)
+
+
+### Bug Fixes
+
+* public token auth ([2a6331f](https://github.com/getpaidhqco/typescript-sdk/commit/2a6331f2bb292036e9145b85fb29a2b533fb8a80))
+
 ## [1.6.1](https://github.com/getpaidhqco/typescript-sdk/compare/v1.6.0...v1.6.1) (2025-08-06)
 
 
