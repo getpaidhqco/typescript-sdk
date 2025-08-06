@@ -3,7 +3,7 @@ export { GetPaidHQClient } from './client';
 export type { GetPaidHQClientConfig } from './client';
 
 // Export version
-export const SPEC_VERSION = '1.0.5';
+export const SPEC_VERSION = '1.0.7';
 
 // Export individual resources for tree-shaking
 export {

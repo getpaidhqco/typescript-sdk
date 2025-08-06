@@ -34,11 +34,8 @@ export class HttpClient {
         return delay * Math.pow(2, retryCount - 1); // Exponential backoff
       },
       retryCondition: (error) => {
-        // Retry on network errors and 5xx errors
-        return (
-          axiosRetry.isNetworkError(error) ||
-          (error.response?.status !== undefined && error.response.status >= 500)
-        );
+        // Retry on network errors
+        return axiosRetry.isNetworkError(error);
       },
     });
 

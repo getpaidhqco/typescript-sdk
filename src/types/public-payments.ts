@@ -1,4 +1,5 @@
 import { Address } from './common';
+import { Order } from './orders';
 
 export interface PublicPaymentDetailsResponse {
   type: 'invoice' | 'checkout';
@@ -41,6 +42,11 @@ export interface PublicCreateOrderRequest {
   success_url?: string;
   cancel_url?: string;
   metadata?: Record<string, string>;
+}
+
+export interface CreateOrderResponse {
+  order: Order;
+  psp: Record<string, any>;
 }
 
 export interface PublicOrderResponse {

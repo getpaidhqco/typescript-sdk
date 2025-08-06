@@ -2,7 +2,7 @@ import { HttpClient } from '../utils/http-client';
 import {
   PublicPaymentDetailsResponse,
   PublicCreateOrderRequest,
-  PublicOrderResponse,
+  CreateOrderResponse,
   PublicOrderStatusResponse,
 } from '../types';
 
@@ -18,8 +18,8 @@ export class PublicPaymentsResource {
   async createPublicPaymentOrder(
     slug: string,
     data: PublicCreateOrderRequest,
-  ): Promise<PublicOrderResponse> {
-    return this.httpClient.post<PublicOrderResponse>(
+  ): Promise<CreateOrderResponse> {
+    return this.httpClient.post<CreateOrderResponse>(
       `${this.resourcePath}/${slug}/create-order`,
       data,
     );
