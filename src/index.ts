@@ -3,7 +3,7 @@ export { GetPaidHQClient } from './client';
 export type { GetPaidHQClientConfig } from './client';
 
 // Export version
-export const SPEC_VERSION = '1.0.7';
+export const SPEC_VERSION = '1.0.9';
 
 // Export individual resources for tree-shaking
 export {
@@ -43,6 +43,8 @@ export type {
   CreateCustomerRequest,
   UpdateCustomerRequest,
   CustomerListParams,
+  CustomerMrrResponse,
+  MrrBreakdownItem,
   // Product types
   Product,
   CreateProductRequest,

@@ -59,3 +59,20 @@ export interface CustomerListParams extends PaginationParams {
   status?: 'active' | 'inactive';
   email?: string;
 }
+
+export interface MrrBreakdownItem {
+  subscription_id: string;
+  product_name: string;
+  monthly_amount: number;
+  billing_interval: 'month' | 'year' | 'week' | 'day';
+  normalized_monthly?: number;
+  next_billing: string;
+}
+
+export interface CustomerMrrResponse {
+  customer_id: string;
+  total_mrr: number;
+  currency: string;
+  breakdown: MrrBreakdownItem[];
+  projected_annual_revenue: number;
+}

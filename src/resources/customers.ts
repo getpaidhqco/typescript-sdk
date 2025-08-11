@@ -4,6 +4,7 @@ import {
   CreateCustomerRequest,
   UpdateCustomerRequest,
   CustomerListParams,
+  CustomerMrrResponse,
   ListResponse,
   CreatePaymentMethodRequest,
   UpdatePaymentMethodRequest,
@@ -134,5 +135,14 @@ export class CustomersResource {
     return this.httpClient.get<ListResponse<DiscountRedemption>>(
       `${this.resourcePath}/${customerId}/discount-redemptions${queryString}`,
     );
+  }
+
+  /**
+   * Get customer MRR calculation
+   * Calculate Monthly Recurring Revenue (MRR) for a specific customer,
+   * including breakdown by subscription and projected annual revenue
+   */
+  async getMrr(customerId: string): Promise<CustomerMrrResponse> {
+    return this.httpClient.get<CustomerMrrResponse>(`${this.resourcePath}/${customerId}/mrr`);
   }
 }
