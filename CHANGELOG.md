@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/getpaidhqco/typescript-sdk/compare/v1.6.3...v1.7.0) (2025-08-11)
+
+
+### Features
+
+* add customer MRR endpoint and response types ([526c22d](https://github.com/getpaidhqco/typescript-sdk/commit/526c22d0a578f6133bf5dde29cbd2dadbd1e25e3))
+
 ## [1.6.3](https://github.com/getpaidhqco/typescript-sdk/compare/v1.6.2...v1.6.3) (2025-08-06)
 
 
