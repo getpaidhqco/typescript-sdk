@@ -1,33 +1,28 @@
-import { BaseEntity } from './common';
+import { Metadata } from './common';
 
-export interface Meter extends BaseEntity {
-  org_id: string;
-  slug: string;
+/** Meter (spec: MeterResponse). */
+export interface MeterResponse {
+  aggregation: string;
+  code: string;
+  created_at: string;
+  field_name: string;
+  id: string;
+  metadata: Metadata;
   name: string;
-  description?: string;
-  event_name: string;
-  aggregation_type: 'sum' | 'max' | 'average' | 'last_during_period';
-  value_property: string;
-  unit_type?: string;
-  is_active: boolean;
+  recurring: boolean;
+  rounding_mode: string;
+  rounding_scale: number;
+  updated_at: string;
 }
 
+/** Create meter input (spec: CreateMeterRequest). */
 export interface CreateMeterRequest {
-  slug: string;
+  aggregation: string;
+  code: string;
+  field_name?: string;
+  metadata?: Metadata;
   name: string;
-  description?: string;
-  event_name: string;
-  aggregation_type: 'sum' | 'max' | 'average' | 'last_during_period';
-  value_property: string;
-  unit_type?: string;
-}
-
-export interface UpdateMeterRequest {
-  name?: string;
-  description?: string;
-  event_name?: string;
-  aggregation_type?: 'sum' | 'max' | 'average' | 'last_during_period';
-  value_property?: string;
-  unit_type?: string;
-  is_active?: boolean;
+  recurring?: boolean;
+  rounding_mode?: string;
+  rounding_scale?: number;
 }

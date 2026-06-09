@@ -1,14 +1,11 @@
 import { HttpClient } from '../utils/http-client';
-import { Organization, CreateOrganizationRequest, ApiKey } from '../types';
+import { CreateOrgRequest, OrgResponse } from '../types';
 
 export class OrganizationsResource {
   constructor(private httpClient: HttpClient) {}
 
-  async create(data: CreateOrganizationRequest): Promise<Organization> {
-    return this.httpClient.post<Organization>('/api/organizations', data);
-  }
-
-  async getApiKeys(): Promise<ApiKey[]> {
-    return this.httpClient.get<ApiKey[]>('/api/organizations/api-keys');
+  /** Create an organization (POST /api/organizations). */
+  async create(data: CreateOrgRequest): Promise<OrgResponse> {
+    return this.httpClient.post<OrgResponse>('/api/organizations', data);
   }
 }

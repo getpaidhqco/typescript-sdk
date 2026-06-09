@@ -1,122 +1,133 @@
-import { BaseEntity, Metadata } from './common';
+import { Metadata } from './common';
 
-export interface Product extends BaseEntity {
-  name: string;
-  description?: string;
-  status: 'active' | 'inactive';
-  type: 'product' | 'service';
-  metadata?: Metadata;
-  variants?: Variant[];
+/** Pricing tier (spec: tiers items). */
+export interface PriceTier {
+  flat_amount: number;
+  from_value: string;
+  per_unit_amount: string;
+  to_value: string;
 }
 
-export interface CreateProductRequest {
-  name: string;
-  description?: string;
-  type: 'product' | 'service';
-  metadata?: Metadata;
-}
-
-export interface UpdateProductRequest {
-  name?: string;
-  description?: string;
-  status?: 'active' | 'inactive';
-  metadata?: Metadata;
-}
-
-export interface Variant extends BaseEntity {
-  product_id: string;
-  name: string;
-  description?: string;
-  sku?: string;
-  status: 'active' | 'inactive';
-  metadata?: Metadata;
-  prices?: Price[];
-}
-
-export interface CreateVariantRequest {
-  name: string;
-  description?: string;
-  sku?: string;
-  metadata?: Metadata;
-}
-
-export interface UpdateVariantRequest {
-  name?: string;
-  description?: string;
-  sku?: string;
-  status?: 'active' | 'inactive';
-  metadata?: Metadata;
-}
-
-export interface Price extends BaseEntity {
-  variant_id: string;
-  label?: string;
-  category: 'one_time' | 'subscription' | 'usage' | 'hybrid' | 'free' | 'variable';
-  scheme: 'fixed' | 'tiered' | 'volume' | 'graduated';
-  cycles?: number;
+/** Price (spec: PriceResponse). */
+export interface PriceResponse {
+  billable_metric_id: string;
+  billing_interval: string;
+  billing_interval_qty: number;
+  category: string;
+  created_at: string;
   currency: string;
-  unit_price?: number;
-  min_price?: number;
-  suggested_price?: number;
-  billing_interval: 'none' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';
-  billing_interval_qty?: number;
-  trial_interval: 'none' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';
-  trial_interval_qty?: number;
-  has_usage?: boolean;
-  usage_type?: 'metered' | 'licensed';
-  unit_type?: string;
-  aggregation_type?: 'sum' | 'max' | 'average' | 'last_during_period';
-  percentage_rate?: number;
-  tiers?: PricingTier[];
-  tax_code?: string;
-  metadata?: Metadata;
-}
-
-export interface PricingTier {
-  up_to: number;
+  cycles: number;
+  id: string;
+  label: string;
+  metadata: Metadata;
+  min_price: number;
+  scheme: string;
+  suggested_price: number;
+  tax_code: string;
+  tiers: PriceTier[];
+  trial_interval: string;
+  trial_interval_qty: number;
   unit_price: number;
-  flat_fee?: number;
-}
-
-export interface RecurringConfig {
-  interval: 'none' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';
-  interval_count: number;
-  trial_period_days?: number;
-}
-
-export interface UsageConfig {
-  unit: string;
-  aggregation_type: 'sum' | 'max' | 'average' | 'last_during_period';
-  unit_amount?: number;
-  tiers?: PricingTier[];
-  package_size?: number;
-}
-
-export interface CreatePriceRequest {
+  updated_at: string;
   variant_id: string;
-  label?: string;
-  category: 'one_time' | 'subscription' | 'usage' | 'hybrid' | 'free' | 'variable';
-  scheme: 'fixed' | 'tiered' | 'volume' | 'graduated';
-  cycles?: number;
-  currency: string;
-  unit_price?: number;
-  min_price?: number;
-  suggested_price?: number;
-  billing_interval: 'none' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';
-  billing_interval_qty?: number;
-  trial_interval: 'none' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';
-  trial_interval_qty?: number;
-  has_usage?: boolean;
-  usage_type?: 'metered' | 'licensed';
-  unit_type?: string;
-  aggregation_type?: 'sum' | 'max' | 'average' | 'last_during_period';
-  percentage_rate?: number;
-  tiers?: PricingTier[];
-  tax_code?: string;
-  metadata?: Metadata;
 }
 
-export interface UpdatePriceRequest {
+/** Create price input (spec: CreatePriceRequest). */
+export interface CreatePriceRequest {
+  billable_metric_id?: string;
+  billing_interval?: string;
+  billing_interval_qty?: number;
+  category: string;
+  currency: string;
+  cycles?: number;
   label?: string;
   metadata?: Metadata;
+  min_price?: number;
+  scheme: string;
+  suggested_price?: number;
+  tax_code?: string;
+  tiers?: PriceTier[];
+  trial_interval?: string;
+  trial_interval_qty?: number;
+  unit_price?: number;
+  variant_id: string;
+}
+
+/** Variant (spec: VariantResponse). */
+export interface VariantResponse {
+  created_at: string;
+  id: string;
+  name: string;
+  prices: PriceResponse[];
+  updated_at: string;
+}
+
+/** Create variant input (spec: CreateVariantRequest). */
+export interface CreateVariantRequest {
+  description?: string;
+  metadata?: Metadata;
+  name: string;
+}
+
+/** Update variant input (spec: UpdateVariantRequest). */
+export interface UpdateVariantRequest {
+  description?: string;
+  metadata?: Metadata;
+  name: string;
+}
+
+/** Product (spec: ProductResponse). */
+export interface ProductResponse {
+  archived_at: string;
+  created_at: string;
+  description: string;
+  id: string;
+  metadata: Metadata;
+  name: string;
+  status: string;
+  updated_at: string;
+  variants: VariantResponse[];
+}
+
+/** Nested price input when creating a product+variants in one call. */
+export interface CreateProductPriceInput {
+  billable_metric_id?: string;
+  billing_interval?: string;
+  billing_interval_qty?: number;
+  category?: string;
+  currency?: string;
+  cycles?: number;
+  label?: string;
+  metadata?: Metadata;
+  min_price?: number;
+  scheme?: string;
+  suggested_price?: number;
+  tax_code?: string;
+  tiers?: PriceTier[];
+  trial_interval?: string;
+  trial_interval_qty?: number;
+  unit_price?: number;
+}
+
+/** Nested variant input when creating a product (spec: CreateProductRequest.variants items). */
+export interface CreateProductVariantInput {
+  description?: string;
+  metadata?: Metadata;
+  name: string;
+  prices?: CreateProductPriceInput[];
+}
+
+/** Create product input (spec: CreateProductRequest). */
+export interface CreateProductRequest {
+  description?: string;
+  metadata?: Metadata;
+  name: string;
+  variants: CreateProductVariantInput[];
+}
+
+/** Update product input (spec: UpdateProductRequest). */
+export interface UpdateProductRequest {
+  description?: string;
+  metadata?: Metadata;
+  name: string;
 }

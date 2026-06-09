@@ -1,26 +1,49 @@
 import { HttpClient } from '../utils/http-client';
-import { Setting, CreateSettingRequest, UpdateSettingRequest } from '../types';
+import { buildQueryString } from '../utils/query';
+import {
+  CreateSettingRequest,
+  UpdateSettingRequest,
+  SettingResponse,
+  ListResponse,
+  PaginationParams,
+} from '../types';
 
 export class SettingsResource {
+  private readonly resourcePath = '/api/settings';
+
   constructor(private httpClient: HttpClient) {}
 
-  async list(parentId: string): Promise<Setting[]> {
-    return this.httpClient.get<Setting[]>(`/api/settings/${parentId}`);
+  /** List settings (GET /api/settings). */
+  async list(params?: PaginationParams): Promise<ListResponse<SettingResponse>> {
+    return this.httpClient.get<ListResponse<SettingResponse>>(
+      `${this.resourcePath}${buildQueryString(params)}`,
+    );
   }
 
-  async create(parentId: string, data: CreateSettingRequest): Promise<Setting> {
-    return this.httpClient.post<Setting>(`/api/settings/${parentId}`, data);
+  /** Create a setting (POST /api/settings). */
+  async create(data: CreateSettingRequest): Promise<SettingResponse> {
+    return this.httpClient.post<SettingResponse>(this.resourcePath, data);
   }
 
-  async get(parentId: string, settingId: string): Promise<Setting> {
-    return this.httpClient.get<Setting>(`/api/settings/${parentId}/${settingId}`);
+  /** Get a setting (GET /api/settings/{parentId}/{id}). */
+  async get(parentId: string, settingId: string): Promise<SettingResponse> {
+    return this.httpClient.get<SettingResponse>(`${this.resourcePath}/${parentId}/${settingId}`);
   }
 
-  async update(parentId: string, settingId: string, data: UpdateSettingRequest): Promise<Setting> {
-    return this.httpClient.put<Setting>(`/api/settings/${parentId}/${settingId}`, data);
+  /** Update a setting (PUT /api/settings/{parentId}/{id}). */
+  async update(
+    parentId: string,
+    settingId: string,
+    data: UpdateSettingRequest,
+  ): Promise<SettingResponse> {
+    return this.httpClient.put<SettingResponse>(
+      `${this.resourcePath}/${parentId}/${settingId}`,
+      data,
+    );
   }
 
+  /** Delete a setting (DELETE /api/settings/{parentId}/{id}). */
   async delete(parentId: string, settingId: string): Promise<void> {
-    return this.httpClient.delete(`/api/settings/${parentId}/${settingId}`);
+    return this.httpClient.delete(`${this.resourcePath}/${parentId}/${settingId}`);
   }
 }

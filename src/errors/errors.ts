@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { ErrorResponse } from '../types';
+import { HTTPError } from '../types';
 
 export class GetPaidHQError extends Error {
   public readonly statusCode?: number;
@@ -76,7 +76,7 @@ export class ServerError extends GetPaidHQError {
   }
 }
 
-export function handleApiError(error: AxiosError<ErrorResponse>): never {
+export function handleApiError(error: AxiosError<HTTPError>): never {
   const response = error.response;
   const requestId = response?.headers['x-request-id'] as string | undefined;
 
@@ -90,9 +90,12 @@ export function handleApiError(error: AxiosError<ErrorResponse>): never {
     );
   }
 
-  const { status, data } = response;
-  const message = data?.error || data?.message || error.message;
-  const details = data?.details;
+  const { status } = response;
+  const data = response.data as
+    | (Partial<HTTPError> & { error?: string; message?: string; details?: Record<string, any> })
+    | undefined;
+  const message = data?.title || data?.detail || data?.error || data?.message || error.message;
+  const details = (data?.errors as unknown as Record<string, any>) ?? data?.details;
 
   switch (status) {
     case 400:

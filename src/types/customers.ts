@@ -1,78 +1,40 @@
-import { BaseEntity, Address, Metadata, PaginationParams } from './common';
+import { BillingAddress, Metadata } from './common';
 
-export interface Customer extends BaseEntity {
+/**
+ * Create customer input (spec: CreateCustomerInput).
+ * The spec exposes no fixed schema for this body, so it is intentionally open.
+ */
+export type CreateCustomerInput = Record<string, any>;
+
+/** Customer (spec: CustomerResponse). */
+export interface CustomerResponse {
+  billing_address: BillingAddress;
+  created_at: string;
   email: string;
-  first_name?: string;
-  last_name?: string;
-  phone?: string;
-  company?: string;
-  billing_address?: Address;
-  shipping_address?: Address;
-  status: 'active' | 'inactive';
-  metadata?: Metadata;
-  payment_methods?: any[];
-  default_payment_method_id?: string;
-}
-
-export interface CreateCustomerRequest {
-  email: string;
-  first_name?: string;
-  last_name?: string;
-  phone?: string;
-  company?: string;
-  billing_address?: Address;
-  shipping_address?: Address;
-  metadata?: Metadata;
-}
-
-export interface UpdateCustomerRequest {
-  email?: string;
-  first_name?: string;
-  last_name?: string;
-  phone?: string;
-  company?: string;
-  billing_address?: Address;
-  shipping_address?: Address;
-  metadata?: Metadata;
-  status?: 'active' | 'inactive';
-}
-
-export interface CreatePaymentMethodRequest {
-  psp: string;
+  first_name: string;
+  id: string;
+  last_name: string;
+  metadata: Metadata;
   name: string;
-  type: 'card' | 'bank_account';
-  details?: any;
-  token: string;
-  is_default?: boolean;
-  billing_address?: Address;
-  metadata?: Metadata;
+  phone: string;
+  updated_at: string;
 }
 
-export interface UpdatePaymentMethodRequest {
-  name?: string;
-  is_default?: boolean;
-  billing_address?: Address;
-  metadata?: Metadata;
-}
-
-export interface CustomerListParams extends PaginationParams {
-  status?: 'active' | 'inactive';
-  email?: string;
-}
-
-export interface MrrBreakdownItem {
-  subscription_id: string;
-  product_name: string;
-  monthly_amount: number;
-  billing_interval: 'month' | 'year' | 'week' | 'day';
-  normalized_monthly?: number;
-  next_billing: string;
-}
-
-export interface CustomerMrrResponse {
+/** Customer dunning history (spec: CustomerDunningHistoryResponse). */
+export interface CustomerDunningHistoryResponse {
+  avg_recovery_time_hours: number;
   customer_id: string;
-  total_mrr: number;
-  currency: string;
-  breakdown: MrrBreakdownItem[];
-  projected_annual_revenue: number;
+  dunning_risk_tier: string;
+  failed_campaigns: number;
+  first_dunning_at: string;
+  last_dunning_at: string;
+  last_recovery_at: string;
+  most_responsive_channel: string;
+  payment_reliability_score: number;
+  preferred_recovery_method: string;
+  successful_recoveries: number;
+  total_amount_at_risk: number;
+  total_amount_lost: number;
+  total_amount_recovered: number;
+  total_dunning_campaigns: number;
 }

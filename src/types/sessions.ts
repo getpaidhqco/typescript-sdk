@@ -1,17 +1,14 @@
-import { BaseEntity, Metadata } from './common';
+import { Metadata } from './common';
 
-export interface Session extends BaseEntity {
-  type: 'checkout' | 'customer_portal';
-  customer_id?: string;
-  return_url?: string;
-  session_url: string;
-  expires_at: string;
+/** Create session input (spec: CreateSessionRequest). */
+export interface CreateSessionRequest {
+  country: string;
+  currency: string;
   metadata?: Metadata;
 }
 
-export interface CreateSessionRequest {
-  type: 'checkout' | 'customer_portal';
-  customer_id?: string;
-  return_url?: string;
-  metadata?: Metadata;
+/** Create session response (spec: CreateSessionResponse). */
+export interface CreateSessionResponse {
+  cart_id: string;
+  id: string;
 }

@@ -1,19 +1,23 @@
-import { BaseEntity } from './common';
-
-export interface Setting extends BaseEntity {
+/** Setting (spec: SettingResponse). */
+export interface SettingResponse {
+  created_at: string;
+  id: string;
   parent_id: string;
-  key: string;
+  type: string;
+  updated_at: string;
   value: string;
-  description?: string;
 }
 
+/** Create setting input (spec: CreateSettingRequest). */
 export interface CreateSettingRequest {
-  key: string;
-  value: string;
-  description?: string;
+  id: string;
+  parent_id?: string;
+  type?: string;
+  value?: string;
 }
 
+/** Update setting input (spec: UpdateSettingRequest). */
 export interface UpdateSettingRequest {
+  type?: string;
   value?: string;
-  description?: string;
 }

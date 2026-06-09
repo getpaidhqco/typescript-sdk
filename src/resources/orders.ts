@@ -1,10 +1,11 @@
 import { HttpClient } from '../utils/http-client';
+import { buildQueryString } from '../utils/query';
 import {
-  Order,
   CreateOrderRequest,
+  CreateOrderResponse,
   CompleteOrderRequest,
-  AddCartItemRequest,
-  RemoveCartItemRequest,
+  OrderResponse,
+  Subscription,
   ListResponse,
   PaginationParams,
 } from '../types';
@@ -14,58 +15,30 @@ export class OrdersResource {
 
   constructor(private httpClient: HttpClient) {}
 
-  private buildQueryString(params?: Record<string, any>): string {
-    if (!params) return '';
-
-    const query = Object.entries(params)
-      .filter(([_, value]) => value !== undefined && value !== null)
-      .map(([key, value]) => {
-        if (Array.isArray(value)) {
-          return value.map((v) => `${key}[]=${encodeURIComponent(v)}`).join('&');
-        }
-        return `${key}=${encodeURIComponent(value)}`;
-      })
-      .join('&');
-
-    return query ? `?${query}` : '';
-  }
-
-  async list(params?: PaginationParams): Promise<ListResponse<Order>> {
-    return this.httpClient.get<ListResponse<Order>>(
-      `${this.resourcePath}${this.buildQueryString(params)}`,
+  /** List orders (GET /api/orders). */
+  async list(params?: PaginationParams): Promise<ListResponse<OrderResponse>> {
+    return this.httpClient.get<ListResponse<OrderResponse>>(
+      `${this.resourcePath}${buildQueryString(params)}`,
     );
   }
 
-  async create(data: CreateOrderRequest): Promise<Order> {
-    return this.httpClient.post<Order>(this.resourcePath, data);
+  /** Create an order (POST /api/orders). */
+  async create(data: CreateOrderRequest): Promise<CreateOrderResponse> {
+    return this.httpClient.post<CreateOrderResponse>(this.resourcePath, data);
   }
 
-  async get(orderId: string): Promise<Order> {
-    return this.httpClient.get<Order>(`${this.resourcePath}/${orderId}`);
+  /** Get an order by id (GET /api/orders/{id}). */
+  async get(orderId: string): Promise<OrderResponse> {
+    return this.httpClient.get<OrderResponse>(`${this.resourcePath}/${orderId}`);
   }
 
-  async complete(orderId: string, data: CompleteOrderRequest): Promise<Order> {
-    return this.httpClient.post<Order>(`${this.resourcePath}/${orderId}/complete`, data);
+  /** Complete an order (POST /api/orders/{id}/complete). */
+  async complete(orderId: string, data: CompleteOrderRequest): Promise<OrderResponse> {
+    return this.httpClient.post<OrderResponse>(`${this.resourcePath}/${orderId}/complete`, data);
   }
 
-  /**
-   * Add item to cart
-   */
-  async addCartItem(cartId: string, data: AddCartItemRequest): Promise<{ status: string }> {
-    return this.httpClient.post<{ status: string }>(`/api/carts/${cartId}/add`, data);
-  }
-
-  /**
-   * Remove item from cart
-   */
-  async removeCartItem(cartId: string, data: RemoveCartItemRequest): Promise<{ status: string }> {
-    return this.httpClient.post<{ status: string }>(`/api/carts/${cartId}/remove`, data);
-  }
-
-  /**
-   * List subscriptions created from an order
-   */
-  async listSubscriptions(orderId: string): Promise<any[]> {
-    return this.httpClient.get<any[]>(`${this.resourcePath}/${orderId}/subscriptions`);
+  /** List subscriptions created from an order (GET /api/orders/{id}/subscriptions). */
+  async listSubscriptions(orderId: string): Promise<Subscription[]> {
+    return this.httpClient.get<Subscription[]>(`${this.resourcePath}/${orderId}/subscriptions`);
   }
 }

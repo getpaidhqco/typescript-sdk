@@ -1,24 +1,25 @@
 import { HttpClient } from '../utils/http-client';
-import { WebhookSubscription, CreateWebhookRequest } from '../types';
+import { buildQueryString } from '../utils/query';
+import { CreateWebhookSubscriptionRequest, ListResponse, PaginationParams } from '../types';
 
 export class WebhooksResource {
   private readonly resourcePath = '/api/webhooks';
 
   constructor(private httpClient: HttpClient) {}
 
-  async list(): Promise<WebhookSubscription[]> {
-    return this.httpClient.get<WebhookSubscription[]>(this.resourcePath);
+  /** List webhook subscriptions (GET /api/webhooks). */
+  async list(params?: PaginationParams): Promise<ListResponse> {
+    return this.httpClient.get<ListResponse>(`${this.resourcePath}${buildQueryString(params)}`);
   }
 
-  async create(data: CreateWebhookRequest): Promise<WebhookSubscription> {
-    return this.httpClient.post<WebhookSubscription>(this.resourcePath, data);
+  /** Create a webhook subscription (POST /api/webhooks). */
+  async create(data: CreateWebhookSubscriptionRequest): Promise<unknown> {
+    return this.httpClient.post<unknown>(this.resourcePath, data);
   }
 
-  async processWebhook(data: any): Promise<{ status: string }> {
-    return this.httpClient.post<{ status: string }>('/api/notify', data);
-  }
-
-  async processCdcWebhook(data: any): Promise<{ status: string }> {
-    return this.httpClient.post<{ status: string }>('/api/notify/cdc', data);
+  /** Deliver/process an incoming webhook notification (POST /api/notify). */
+  async notify(p?: string): Promise<unknown> {
+    const query = p ? `?p=${encodeURIComponent(p)}` : '';
+    return this.httpClient.post<unknown>(`/api/notify${query}`, {});
   }
 }

@@ -1,36 +1,14 @@
-import { BaseEntity } from './common';
-
-export interface Gateway extends BaseEntity {
-  org_id: string;
-  psp_id: string;
+/** Payment service provider gateway (spec: GatewayResponse). */
+export interface GatewayResponse {
+  created_at: string;
+  id: string;
   name: string;
-  settings: Record<string, any>;
-  is_active: boolean;
+  updated_at: string;
 }
 
-export interface PspConfiguration extends BaseEntity {
-  name: string;
-  provider: 'paystack' | 'checkout_com' | 'stripe';
-  configuration: any;
-  is_active: boolean;
-}
-
+/** Create gateway input (spec: CreateGatewayRequest). */
 export interface CreateGatewayRequest {
-  psp_id: string;
   name: string;
-  settings: Record<string, any>;
-  is_active?: boolean;
-}
-
-export interface CreatePspConfigurationRequest {
-  name: string;
-  provider: 'paystack' | 'checkout_com' | 'stripe';
-  configuration: any;
-  is_active?: boolean;
-}
-
-export interface UpdateGatewayRequest {
-  name?: string;
-  settings?: Record<string, any>;
-  is_active?: boolean;
+  psp: string;
+  settings: Record<string, string>;
 }

@@ -1,117 +1,105 @@
-import { BaseEntity, DateTime, Metadata, Currency, PaginationParams } from './common';
+import { BillingAddress, Metadata } from './common';
 
-export type SubscriptionStatus =
-  | 'trial'
-  | 'active'
-  | 'past_due'
-  | 'non_renewing'
-  | 'paused'
-  | 'unpaid'
-  | 'cancelled'
-  | 'pending'
-  | 'expired'
-  | 'completed'
-  | 'error';
-
-export interface Subscription extends BaseEntity {
-  customer_id: string;
-  status: SubscriptionStatus;
-  currency: Currency;
-  current_period_start: DateTime;
-  current_period_end: DateTime;
-  trial_start?: DateTime;
-  trial_end?: DateTime;
-  cancelled_at?: DateTime;
-  cancel_at_period_end: boolean;
-  billing_cycle_anchor?: DateTime;
-  items: SubscriptionItem[];
-  default_payment_method_id?: string;
-  metadata?: Metadata;
-}
-
-export interface SubscriptionItem extends BaseEntity {
-  subscription_id: string;
-  price_id: string;
-  quantity: number;
-  description?: string;
-  metadata?: Metadata;
-}
-
-export interface CreateSubscriptionRequest {
-  customer_id: string;
-  payment_method_id?: string;
-  currency: string;
-  items: CreateSubscriptionItemRequest[];
-  metadata?: Metadata;
-}
-
-export interface CreateSubscriptionItemRequest {
-  price_id: string;
-  name: string;
-  description?: string;
-  quantity?: number;
-  metadata?: Metadata;
-}
-
-export interface UpdateSubscriptionRequest {
-  default_payment_method_id?: string;
-  metadata?: Metadata;
-  cancel_at_period_end?: boolean;
-}
-
-export interface PauseSubscriptionRequest {
-  reason: string;
-  pause_mode: 'temporary' | 'indefinite';
-  resume_at?: DateTime;
-}
-
-export interface ResumeSubscriptionRequest {
-  reason?: string;
-  resume_behavior?: 'continue_existing_period' | 'start_new_period';
-  proration_mode?: 'none' | 'credit_unused';
-}
-
-export interface CancelSubscriptionRequest {
-  reason?: string;
-  cancel_at?: 'immediate' | 'period_end';
-}
-
-export interface ActivateSubscriptionRequest {
-  trial_end?: DateTime;
-  billing_cycle_anchor?: DateTime;
-}
-
-export interface ChangePlanRequest {
-  new_variant_id: string;
-  new_price_id: string;
-  proration_mode?: 'none' | 'immediate' | 'credit_unused';
-  effective_date?: 'immediate' | 'next_billing_cycle';
-  reason?: string;
-}
-
-export interface UpdateBillingAnchorRequest {
-  billing_anchor: number; // Day of month (1-31)
-  proration_mode?: 'none' | 'credit_unused';
-}
-
-export interface PlanChange {
+/** Customer sub-object embedded in {@link SubscriptionResponse}. */
+export interface SubscriptionCustomer {
+  billing_address: BillingAddress;
+  created_at: string;
+  email: string;
+  first_name: string;
   id: string;
-  subscription_id: string;
-  from_items: SubscriptionItem[];
-  to_items: SubscriptionItem[];
-  effective_date: DateTime;
-  proration_amount?: number;
+  last_name: string;
+  metadata: Metadata;
+  name: string;
+  phone: string;
+  updated_at: string;
 }
 
-export interface ProrationDetails {
+/** Subscription (spec: SubscriptionResponse). */
+export interface SubscriptionResponse {
   amount: number;
-  currency: Currency;
-  period_start: DateTime;
-  period_end: DateTime;
-  description: string;
+  billing_anchor: number;
+  billing_interval: string;
+  billing_interval_qty: number;
+  cancel_at: string;
+  cancelled_at: string;
+  created_at: string;
+  currency: string;
+  current_period_end: string;
+  current_period_start: string;
+  customer: SubscriptionCustomer;
+  cycles: number;
+  cycles_processed: number;
+  end_date: string;
+  ends_at: string;
+  id: string;
+  last_charge: string;
+  metadata: Metadata;
+  next_retry: string;
+  order_id: string;
+  order_item_id: string;
+  payment_method_id: string;
+  renews_at: string;
+  retries: number;
+  start_date: string;
+  status: string;
+  total_revenue: number;
+  trial_ends_at: string;
+  updated_at: string;
 }
 
-export interface SubscriptionListParams extends PaginationParams {
-  status?: SubscriptionStatus;
-  customer_id?: string;
+/**
+ * Opaque subscription object (spec: Subscription).
+ * Returned by `GET /api/orders/{id}/subscriptions`; the spec exposes no schema.
+ */
+export type Subscription = Record<string, any>;
+
+/** Update subscription input (spec: UpdateSubscriptionRequest). */
+export interface UpdateSubscriptionRequest {
+  default_payment_method?: string;
+  id?: string;
+  metadata?: Metadata;
+  status?: string;
+}
+
+/** Update billing anchor input (spec: UpdateBillingAnchorRequest). */
+export interface UpdateBillingAnchorRequest {
+  billing_anchor: number;
+  proration_mode: string;
+}
+
+/** Proration details (spec: ProrationDetailsResponse). */
+export interface ProrationDetailsResponse {
+  credit_amount: number;
+  current_period_end: string;
+  current_period_start: string;
+  days_credited: number;
+  new_billing_anchor: number;
+  new_period_end: string;
+  new_period_start: string;
+  old_billing_anchor: number;
+}
+
+/** Per-meter usage entry (spec: SubscriptionUsageResponse.meters items). */
+export interface SubscriptionUsageMeter {
+  aggregation?: string;
+  metric_code?: string;
+  quantity?: string;
+}
+
+/** Subscription usage summary (spec: SubscriptionUsageResponse). */
+export interface SubscriptionUsageResponse {
+  current_period_end: string;
+  current_period_start: string;
+  meters: SubscriptionUsageMeter[];
+  subscription_id: string;
+}
+
+/** Pause / cancel subscription input (spec: PauseSubscriptionRequest). */
+export interface PauseSubscriptionRequest {
+  reason?: string;
+}
+
+/** Resume subscription input (spec: ResumeSubscriptionRequest). */
+export interface ResumeSubscriptionRequest {
+  resume_behavior?: string;
 }

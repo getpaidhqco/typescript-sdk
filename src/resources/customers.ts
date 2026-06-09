@@ -1,148 +1,65 @@
 import { HttpClient } from '../utils/http-client';
+import { buildQueryString } from '../utils/query';
 import {
-  Customer,
-  CreateCustomerRequest,
-  UpdateCustomerRequest,
-  CustomerListParams,
-  CustomerMrrResponse,
+  CreateCustomerInput,
+  CustomerResponse,
+  CustomerDunningHistoryResponse,
+  CreatePaymentMethodInput,
+  UpdatePaymentMethodInput,
+  PaymentMethodResponse,
   ListResponse,
-  CreatePaymentMethodRequest,
-  UpdatePaymentMethodRequest,
-  Invoice,
-  InvoiceListParams,
-  Order,
+  PaginationParams,
 } from '../types';
-import { PaymentMethod } from '../types/payments';
-import { DiscountRedemption, ListDiscountRedemptionsParams } from '../types/discounts';
 
 export class CustomersResource {
   private readonly resourcePath = '/api/customers';
 
   constructor(private httpClient: HttpClient) {}
 
-  private buildQueryString(params?: Record<string, any>): string {
-    if (!params) return '';
-
-    const query = Object.entries(params)
-      .filter(([_, value]) => value !== undefined && value !== null)
-      .map(([key, value]) => {
-        if (Array.isArray(value)) {
-          return value.map((v) => `${key}[]=${encodeURIComponent(v)}`).join('&');
-        }
-        return `${key}=${encodeURIComponent(value)}`;
-      })
-      .join('&');
-
-    return query ? `?${query}` : '';
-  }
-
-  async list(params?: CustomerListParams): Promise<ListResponse<Customer>> {
-    return this.httpClient.get<ListResponse<Customer>>(
-      `${this.resourcePath}${this.buildQueryString(params)}`,
+  /** List customers (GET /api/customers). */
+  async list(params?: PaginationParams): Promise<ListResponse<CustomerResponse>> {
+    return this.httpClient.get<ListResponse<CustomerResponse>>(
+      `${this.resourcePath}${buildQueryString(params)}`,
     );
   }
 
-  async create(data: CreateCustomerRequest): Promise<Customer> {
-    return this.httpClient.post<Customer>(this.resourcePath, data);
+  /** Create a customer (POST /api/customers). */
+  async create(data: CreateCustomerInput): Promise<CustomerResponse> {
+    return this.httpClient.post<CustomerResponse>(this.resourcePath, data);
   }
 
-  async get(customerId: string): Promise<Customer> {
-    return this.httpClient.get<Customer>(`${this.resourcePath}/${customerId}`);
+  /** Get a customer by id (GET /api/customers/{id}). */
+  async get(customerId: string): Promise<CustomerResponse> {
+    return this.httpClient.get<CustomerResponse>(`${this.resourcePath}/${customerId}`);
   }
 
-  async update(customerId: string, data: UpdateCustomerRequest): Promise<Customer> {
-    return this.httpClient.patch<Customer>(`${this.resourcePath}/${customerId}`, data);
-  }
-
-  async delete(customerId: string): Promise<void> {
-    return this.httpClient.delete(`${this.resourcePath}/${customerId}`);
-  }
-
-  async suspend(customerId: string): Promise<Customer> {
-    return this.update(customerId, { status: 'inactive' });
-  }
-
-  async activate(customerId: string): Promise<Customer> {
-    return this.update(customerId, { status: 'active' });
-  }
-
-  async getOrders(_customerId: string): Promise<Order[]> {
-    console.warn('getOrders endpoint not implemented in API');
-    return [];
-  }
-
-  async listInvoices(
-    customerId: string,
-    params?: InvoiceListParams,
-  ): Promise<ListResponse<Invoice>> {
-    const queryString = this.buildQueryString(params);
-    return this.httpClient.get<ListResponse<Invoice>>(
-      `${this.resourcePath}/${customerId}/invoices${queryString}`,
+  /** Get a customer's dunning history (GET /api/customers/{id}/dunning-history). */
+  async getDunningHistory(customerId: string): Promise<CustomerDunningHistoryResponse> {
+    return this.httpClient.get<CustomerDunningHistoryResponse>(
+      `${this.resourcePath}/${customerId}/dunning-history`,
     );
   }
 
+  /** Add a payment method to a customer (POST /api/customers/{id}/payment-methods). */
   async createPaymentMethod(
     customerId: string,
-    data: CreatePaymentMethodRequest,
-  ): Promise<PaymentMethod> {
-    return this.httpClient.post<PaymentMethod>(
+    data: CreatePaymentMethodInput,
+  ): Promise<PaymentMethodResponse> {
+    return this.httpClient.post<PaymentMethodResponse>(
       `${this.resourcePath}/${customerId}/payment-methods`,
       data,
     );
   }
 
-  async listPaymentMethods(customerId: string): Promise<PaymentMethod[]> {
-    return this.httpClient.get<PaymentMethod[]>(
-      `${this.resourcePath}/${customerId}/payment-methods`,
-    );
-  }
-
-  async getPaymentMethod(customerId: string, paymentMethodId: string): Promise<PaymentMethod> {
-    return this.httpClient.get<PaymentMethod>(
-      `${this.resourcePath}/${customerId}/payment-methods/${paymentMethodId}`,
-    );
-  }
-
+  /** Update a customer's payment method (PUT /api/customers/{id}/payment-methods/{pmid}). */
   async updatePaymentMethod(
     customerId: string,
     paymentMethodId: string,
-    data: UpdatePaymentMethodRequest,
-  ): Promise<PaymentMethod> {
-    return this.httpClient.put<PaymentMethod>(
+    data: UpdatePaymentMethodInput,
+  ): Promise<PaymentMethodResponse> {
+    return this.httpClient.put<PaymentMethodResponse>(
       `${this.resourcePath}/${customerId}/payment-methods/${paymentMethodId}`,
       data,
     );
-  }
-
-  async deletePaymentMethod(customerId: string, paymentMethodId: string): Promise<void> {
-    return this.httpClient.delete(
-      `${this.resourcePath}/${customerId}/payment-methods/${paymentMethodId}`,
-    );
-  }
-
-  async getDunningHistory(customerId: string): Promise<any[]> {
-    return this.httpClient.get<any[]>(`${this.resourcePath}/${customerId}/dunning-history`);
-  }
-
-  /**
-   * List customer discount redemptions
-   */
-  async listDiscountRedemptions(
-    customerId: string,
-    params?: ListDiscountRedemptionsParams,
-  ): Promise<ListResponse<DiscountRedemption>> {
-    const queryString = this.buildQueryString(params);
-    return this.httpClient.get<ListResponse<DiscountRedemption>>(
-      `${this.resourcePath}/${customerId}/discount-redemptions${queryString}`,
-    );
-  }
-
-  /**
-   * Get customer MRR calculation
-   * Calculate Monthly Recurring Revenue (MRR) for a specific customer,
-   * including breakdown by subscription and projected annual revenue
-   */
-  async getMrr(customerId: string): Promise<CustomerMrrResponse> {
-    return this.httpClient.get<CustomerMrrResponse>(`${this.resourcePath}/${customerId}/mrr`);
   }
 }

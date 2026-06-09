@@ -1,16 +1,16 @@
 import { HttpClient } from '../utils/http-client';
+import { buildQueryString } from '../utils/query';
 import {
-  Product,
   CreateProductRequest,
   UpdateProductRequest,
-  ListResponse,
-  PaginationParams,
-  Variant,
+  ProductResponse,
   CreateVariantRequest,
   UpdateVariantRequest,
-  Price,
+  VariantResponse,
   CreatePriceRequest,
-  UpdatePriceRequest,
+  PriceResponse,
+  ListResponse,
+  PaginationParams,
 } from '../types';
 
 export class ProductsResource {
@@ -18,50 +18,56 @@ export class ProductsResource {
 
   constructor(private httpClient: HttpClient) {}
 
-  private buildQueryString(params?: Record<string, any>): string {
-    if (!params) return '';
-
-    const query = Object.entries(params)
-      .filter(([_, value]) => value !== undefined && value !== null)
-      .map(([key, value]) => {
-        if (Array.isArray(value)) {
-          return value.map((v) => `${key}[]=${encodeURIComponent(v)}`).join('&');
-        }
-        return `${key}=${encodeURIComponent(value)}`;
-      })
-      .join('&');
-
-    return query ? `?${query}` : '';
-  }
-
-  async list(params?: PaginationParams): Promise<ListResponse<Product>> {
-    return this.httpClient.get<ListResponse<Product>>(
-      `${this.resourcePath}${this.buildQueryString(params)}`,
+  /** List products (GET /api/products). */
+  async list(params?: PaginationParams): Promise<ListResponse<ProductResponse>> {
+    return this.httpClient.get<ListResponse<ProductResponse>>(
+      `${this.resourcePath}${buildQueryString(params)}`,
     );
   }
 
-  async create(data: CreateProductRequest): Promise<Product> {
-    return this.httpClient.post<Product>(this.resourcePath, data);
+  /** Create a product (POST /api/products). */
+  async create(data: CreateProductRequest): Promise<ProductResponse> {
+    return this.httpClient.post<ProductResponse>(this.resourcePath, data);
   }
 
-  async get(productId: string): Promise<Product> {
-    return this.httpClient.get<Product>(`${this.resourcePath}/${productId}`);
+  /** Get a product by id (GET /api/products/{id}). */
+  async get(productId: string): Promise<ProductResponse> {
+    return this.httpClient.get<ProductResponse>(`${this.resourcePath}/${productId}`);
   }
 
-  async update(productId: string, data: UpdateProductRequest): Promise<Product> {
-    return this.httpClient.patch<Product>(`${this.resourcePath}/${productId}`, data);
+  /** Update a product (PATCH /api/products/{id}). */
+  async update(productId: string, data: UpdateProductRequest): Promise<ProductResponse> {
+    return this.httpClient.patch<ProductResponse>(`${this.resourcePath}/${productId}`, data);
   }
 
+  /** Delete a product (DELETE /api/products/{id}). */
   async delete(productId: string): Promise<void> {
     return this.httpClient.delete(`${this.resourcePath}/${productId}`);
   }
 
-  async listVariants(productId: string): Promise<Variant[]> {
-    return this.httpClient.get<Variant[]>(`${this.resourcePath}/${productId}/variants`);
+  /** Archive a product (POST /api/products/{id}/archive). */
+  async archive(productId: string): Promise<ProductResponse> {
+    return this.httpClient.post<ProductResponse>(`${this.resourcePath}/${productId}/archive`, {});
   }
 
-  async createVariant(productId: string, data: CreateVariantRequest): Promise<Variant> {
-    return this.httpClient.post<Variant>(`${this.resourcePath}/${productId}/variants`, data);
+  /** Unarchive a product (POST /api/products/{id}/unarchive). */
+  async unarchive(productId: string): Promise<ProductResponse> {
+    return this.httpClient.post<ProductResponse>(`${this.resourcePath}/${productId}/unarchive`, {});
+  }
+
+  /** List a product's variants (GET /api/products/{id}/variants). */
+  async listVariants(productId: string): Promise<ListResponse<VariantResponse>> {
+    return this.httpClient.get<ListResponse<VariantResponse>>(
+      `${this.resourcePath}/${productId}/variants`,
+    );
+  }
+
+  /** Create a variant under a product (POST /api/products/{id}/variants). */
+  async createVariant(productId: string, data: CreateVariantRequest): Promise<VariantResponse> {
+    return this.httpClient.post<VariantResponse>(
+      `${this.resourcePath}/${productId}/variants`,
+      data,
+    );
   }
 }
 
@@ -70,20 +76,26 @@ export class VariantsResource {
 
   constructor(private httpClient: HttpClient) {}
 
-  async get(variantId: string): Promise<Variant> {
-    return this.httpClient.get<Variant>(`${this.resourcePath}/${variantId}`);
+  /** Get a variant by id (GET /api/variants/{variantId}). */
+  async get(variantId: string): Promise<VariantResponse> {
+    return this.httpClient.get<VariantResponse>(`${this.resourcePath}/${variantId}`);
   }
 
-  async update(variantId: string, data: UpdateVariantRequest): Promise<Variant> {
-    return this.httpClient.put<Variant>(`${this.resourcePath}/${variantId}`, data);
+  /** Update a variant (PUT /api/variants/{variantId}). */
+  async update(variantId: string, data: UpdateVariantRequest): Promise<VariantResponse> {
+    return this.httpClient.put<VariantResponse>(`${this.resourcePath}/${variantId}`, data);
   }
 
+  /** Delete a variant (DELETE /api/variants/{variantId}). */
   async delete(variantId: string): Promise<void> {
     return this.httpClient.delete(`${this.resourcePath}/${variantId}`);
   }
 
-  async listPrices(variantId: string): Promise<Price[]> {
-    return this.httpClient.get<Price[]>(`${this.resourcePath}/${variantId}/prices`);
+  /** List a variant's prices (GET /api/variants/{variantId}/prices). */
+  async listPrices(variantId: string): Promise<ListResponse<PriceResponse>> {
+    return this.httpClient.get<ListResponse<PriceResponse>>(
+      `${this.resourcePath}/${variantId}/prices`,
+    );
   }
 }
 
@@ -92,18 +104,22 @@ export class PricesResource {
 
   constructor(private httpClient: HttpClient) {}
 
-  async create(data: CreatePriceRequest): Promise<Price> {
-    return this.httpClient.post<Price>(this.resourcePath, data);
+  /** Create a price (POST /api/prices). */
+  async create(data: CreatePriceRequest): Promise<PriceResponse> {
+    return this.httpClient.post<PriceResponse>(this.resourcePath, data);
   }
 
-  async get(priceId: string): Promise<Price> {
-    return this.httpClient.get<Price>(`${this.resourcePath}/${priceId}`);
+  /** Get a price by id (GET /api/prices/{priceId}). */
+  async get(priceId: string): Promise<PriceResponse> {
+    return this.httpClient.get<PriceResponse>(`${this.resourcePath}/${priceId}`);
   }
 
-  async update(priceId: string, data: UpdatePriceRequest): Promise<Price> {
-    return this.httpClient.patch<Price>(`${this.resourcePath}/${priceId}`, data);
+  /** Update a price (PATCH /api/prices/{priceId}). */
+  async update(priceId: string, data: CreatePriceRequest): Promise<PriceResponse> {
+    return this.httpClient.patch<PriceResponse>(`${this.resourcePath}/${priceId}`, data);
   }
 
+  /** Delete a price (DELETE /api/prices/{priceId}). */
   async delete(priceId: string): Promise<void> {
     return this.httpClient.delete(`${this.resourcePath}/${priceId}`);
   }

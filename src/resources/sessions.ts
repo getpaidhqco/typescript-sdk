@@ -1,10 +1,11 @@
 import { HttpClient } from '../utils/http-client';
-import { Session, CreateSessionRequest } from '../types';
+import { CreateSessionRequest, CreateSessionResponse } from '../types';
 
 export class SessionsResource {
   constructor(private httpClient: HttpClient) {}
 
-  async create(data: CreateSessionRequest): Promise<Session> {
-    return this.httpClient.post<Session>('/api/sessions', data);
+  /** Create a checkout session (POST /api/sessions). */
+  async create(data: CreateSessionRequest): Promise<CreateSessionResponse> {
+    return this.httpClient.post<CreateSessionResponse>('/api/sessions', data);
   }
 }

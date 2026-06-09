@@ -1,4 +1,4 @@
-// Export all types
+// Export all types (1:1 with the OpenAPI spec component schemas)
 export * from './common';
 export * from './customers';
 export * from './products';
@@ -11,10 +11,9 @@ export * from './orders';
 export * from './gateways';
 export * from './settings';
 export * from './organizations';
+export * from './api-keys';
+export * from './billing';
 export * from './dunning';
 export * from './webhooks';
-export * from './reports';
 export * from './sessions';
-export * from './discounts';
-export * from './payment-links';
-export * from './public-payments';
+export * from './carts';

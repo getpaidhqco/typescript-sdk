@@ -1,20 +1,17 @@
 import { HttpClient } from '../utils/http-client';
+import { buildQueryString } from '../utils/query';
 import {
-  Subscription,
-  CreateSubscriptionRequest,
+  SubscriptionResponse,
   UpdateSubscriptionRequest,
-  SubscriptionListParams,
-  ListResponse,
+  UpdateBillingAnchorRequest,
+  ProrationDetailsResponse,
   PauseSubscriptionRequest,
   ResumeSubscriptionRequest,
-  CancelSubscriptionRequest,
-  ActivateSubscriptionRequest,
-  ChangePlanRequest,
-  UpdateBillingAnchorRequest,
-  Payment,
+  InvoiceResponse,
+  PaymentResponse,
+  SubscriptionUsageResponse,
+  ListResponse,
   PaginationParams,
-  UsageEventResponse,
-  UsageEstimateResponse,
 } from '../types';
 
 export class SubscriptionsResource {
@@ -22,105 +19,97 @@ export class SubscriptionsResource {
 
   constructor(private httpClient: HttpClient) {}
 
-  private buildQueryString(params?: Record<string, any>): string {
-    if (!params) return '';
-
-    const query = Object.entries(params)
-      .filter(([_, value]) => value !== undefined && value !== null)
-      .map(([key, value]) => {
-        if (Array.isArray(value)) {
-          return value.map((v) => `${key}[]=${encodeURIComponent(v)}`).join('&');
-        }
-        return `${key}=${encodeURIComponent(value)}`;
-      })
-      .join('&');
-
-    return query ? `?${query}` : '';
-  }
-
-  async list(params?: SubscriptionListParams): Promise<ListResponse<Subscription>> {
-    return this.httpClient.get<ListResponse<Subscription>>(
-      `${this.resourcePath}${this.buildQueryString(params)}`,
+  /** List subscriptions (GET /api/subscriptions). */
+  async list(params?: PaginationParams): Promise<ListResponse<SubscriptionResponse>> {
+    return this.httpClient.get<ListResponse<SubscriptionResponse>>(
+      `${this.resourcePath}${buildQueryString(params)}`,
     );
   }
 
-  async create(data: CreateSubscriptionRequest): Promise<Subscription> {
-    return this.httpClient.post<Subscription>(this.resourcePath, data);
+  /** Get a subscription by id (GET /api/subscriptions/{id}). */
+  async get(subscriptionId: string): Promise<SubscriptionResponse> {
+    return this.httpClient.get<SubscriptionResponse>(`${this.resourcePath}/${subscriptionId}`);
   }
 
-  async get(subscriptionId: string): Promise<Subscription> {
-    return this.httpClient.get<Subscription>(`${this.resourcePath}/${subscriptionId}`);
-  }
-
-  async update(subscriptionId: string, data: UpdateSubscriptionRequest): Promise<Subscription> {
-    return this.httpClient.patch<Subscription>(`${this.resourcePath}/${subscriptionId}`, data);
-  }
-
-  async pause(subscriptionId: string, data: PauseSubscriptionRequest): Promise<Subscription> {
-    return this.httpClient.put<Subscription>(`${this.resourcePath}/${subscriptionId}/pause`, data);
-  }
-
-  async resume(subscriptionId: string, data: ResumeSubscriptionRequest): Promise<Subscription> {
-    return this.httpClient.put<Subscription>(`${this.resourcePath}/${subscriptionId}/resume`, data);
-  }
-
-  async activate(
+  /** Update a subscription (PATCH /api/subscriptions/{id}). */
+  async update(
     subscriptionId: string,
-    data?: ActivateSubscriptionRequest,
-  ): Promise<Subscription> {
-    return this.httpClient.put<Subscription>(
-      `${this.resourcePath}/${subscriptionId}/activate`,
-      data || {},
-    );
-  }
-
-  async cancel(subscriptionId: string, data: CancelSubscriptionRequest): Promise<Subscription> {
-    return this.httpClient.put<Subscription>(`${this.resourcePath}/${subscriptionId}/cancel`, data);
-  }
-
-  async changePlan(
-    subscriptionId: string,
-    data: ChangePlanRequest,
-  ): Promise<{ subscription: Subscription; plan_change: any }> {
-    return this.httpClient.put<{ subscription: Subscription; plan_change: any }>(
-      `${this.resourcePath}/${subscriptionId}/change-plan`,
+    data: UpdateSubscriptionRequest,
+  ): Promise<SubscriptionResponse> {
+    return this.httpClient.patch<SubscriptionResponse>(
+      `${this.resourcePath}/${subscriptionId}`,
       data,
     );
   }
 
+  /** Update a subscription's billing anchor (PATCH /api/subscriptions/{id}/billing-anchor). */
   async updateBillingAnchor(
     subscriptionId: string,
     data: UpdateBillingAnchorRequest,
-  ): Promise<{ subscription: Subscription; proration_details: any }> {
-    return this.httpClient.put<{ subscription: Subscription; proration_details: any }>(
+  ): Promise<ProrationDetailsResponse> {
+    return this.httpClient.patch<ProrationDetailsResponse>(
       `${this.resourcePath}/${subscriptionId}/billing-anchor`,
       data,
     );
   }
 
+  /** Cancel a subscription (PUT /api/subscriptions/{id}/cancel). */
+  async cancel(
+    subscriptionId: string,
+    data: PauseSubscriptionRequest,
+  ): Promise<SubscriptionResponse> {
+    return this.httpClient.put<SubscriptionResponse>(
+      `${this.resourcePath}/${subscriptionId}/cancel`,
+      data,
+    );
+  }
+
+  /** Pause a subscription (PUT /api/subscriptions/{id}/pause). */
+  async pause(
+    subscriptionId: string,
+    data: PauseSubscriptionRequest,
+  ): Promise<SubscriptionResponse> {
+    return this.httpClient.put<SubscriptionResponse>(
+      `${this.resourcePath}/${subscriptionId}/pause`,
+      data,
+    );
+  }
+
+  /** Resume a subscription (PUT /api/subscriptions/{id}/resume). */
+  async resume(
+    subscriptionId: string,
+    data: ResumeSubscriptionRequest,
+  ): Promise<SubscriptionResponse> {
+    return this.httpClient.put<SubscriptionResponse>(
+      `${this.resourcePath}/${subscriptionId}/resume`,
+      data,
+    );
+  }
+
+  /** List a subscription's invoices (GET /api/subscriptions/{id}/invoices). */
+  async listInvoices(
+    subscriptionId: string,
+    params?: PaginationParams,
+  ): Promise<ListResponse<InvoiceResponse>> {
+    return this.httpClient.get<ListResponse<InvoiceResponse>>(
+      `${this.resourcePath}/${subscriptionId}/invoices${buildQueryString(params)}`,
+    );
+  }
+
+  /** List a subscription's payments (GET /api/subscriptions/{id}/payments). */
   async listPayments(
     subscriptionId: string,
     params?: PaginationParams,
-  ): Promise<ListResponse<Payment>> {
-    const queryString = this.buildQueryString(params);
-    return this.httpClient.get<ListResponse<Payment>>(
-      `${this.resourcePath}/${subscriptionId}/payments${queryString}`,
+  ): Promise<ListResponse<PaymentResponse>> {
+    return this.httpClient.get<ListResponse<PaymentResponse>>(
+      `${this.resourcePath}/${subscriptionId}/payments${buildQueryString(params)}`,
     );
   }
 
-  async getUsage(
-    subscriptionId: string,
-    params?: { start_date?: string; end_date?: string },
-  ): Promise<{ items: UsageEventResponse[]; count: number }> {
-    const queryString = this.buildQueryString(params);
-    return this.httpClient.get<{ items: UsageEventResponse[]; count: number }>(
-      `${this.resourcePath}/${subscriptionId}/usage${queryString}`,
-    );
-  }
-
-  async getUsageEstimate(subscriptionId: string): Promise<UsageEstimateResponse> {
-    return this.httpClient.get<UsageEstimateResponse>(
-      `${this.resourcePath}/${subscriptionId}/estimate`,
+  /** Get a subscription's usage summary (GET /api/subscriptions/{id}/usage). */
+  async getUsage(subscriptionId: string): Promise<SubscriptionUsageResponse> {
+    return this.httpClient.get<SubscriptionUsageResponse>(
+      `${this.resourcePath}/${subscriptionId}/usage`,
     );
   }
 }
